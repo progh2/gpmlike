@@ -2,6 +2,7 @@ import "./style.css";
 import { VRM } from "@pixiv/three-vrm";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import {
   type AvatarSlot,
   type AvatarSlotCatalog,
@@ -12,8 +13,16 @@ import {
   slotIdFromSearch,
   writeSlotQuery,
 } from "./avatarSlots";
-import { disposeVrm, frameVrm, loadVrm } from "./loadVrm";
-import { addSchedulePlaceholders } from "./placeholders";
+import { disposeVrm, loadVrm } from "./loadVrm";
+import {
+  type NpcAgent,
+  agentLabel,
+  findAgent,
+  spawnScheduledAgents,
+  tickAgent,
+} from "./npcAgents";
+import { AcademyClock, loadSchedule, type ScheduleCatalog } from "./npcSchedule";
+import { addSchedulePlaceholders, makeBillboardLabel } from "./placeholders";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1f2a);
@@ -25,7 +34,7 @@ const camera = new THREE.PerspectiveCamera(
   0.05,
   200,
 );
-camera.position.set(0.6, 1.45, 4.2);
+camera.position.set(11, 11, 15);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -33,19 +42,24 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.appendChild(renderer.domElement);
 
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(window.innerWidth, window.innerHeight);
+labelRenderer.domElement.className = "label-layer";
+document.body.appendChild(labelRenderer.domElement);
+
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.screenSpacePanning = true;
-controls.target.set(0, 1.05, 0);
+controls.target.set(0, 0.4, 1);
 controls.minDistance = 1.2;
-controls.maxDistance = 18;
+controls.maxDistance = 48;
 controls.maxPolarAngle = Math.PI * 0.49;
 controls.update();
 
-const grid = new THREE.GridHelper(40, 40, 0x7ec8d8, 0x3d5566);
+const grid = new THREE.GridHelper(48, 48, 0x7ec8d8, 0x3d5566);
 scene.add(grid);
 
 const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(40, 40),
+  new THREE.PlaneGeometry(48, 48),
   new THREE.MeshStandardMaterial({
     color: 0x1a2633,
     roughness: 0.95,
@@ -68,8 +82,6 @@ const fill = new THREE.DirectionalLight(0xfff2e0, 0.7);
 fill.position.set(-5, 4, 6);
 scene.add(fill);
 
-addSchedulePlaceholders(scene);
-
 function requireElement<T extends HTMLElement>(selector: string): T {
   const element = document.querySelector<T>(selector);
   if (!element) {
@@ -81,10 +93,19 @@ function requireElement<T extends HTMLElement>(selector: string): T {
 const slotSelect = requireElement<HTMLSelectElement>("#slot-select");
 const slotMeta = requireElement<HTMLElement>("#slot-meta");
 const slotStatus = requireElement<HTMLElement>("#slot-status");
+const clockStatus = requireElement<HTMLElement>("#clock-status");
+const npcRoster = requireElement<HTMLElement>("#npc-roster");
 
 const clock = new THREE.Clock();
+const followTarget = new THREE.Vector3();
 let currentVrm: VRM | undefined;
 let loadGeneration = 0;
+let agents: NpcAgent[] = [];
+let schedule: ScheduleCatalog;
+let academyClock: AcademyClock;
+let focusedSlotId = "";
+
+const PREVIEW_STAND = new THREE.Vector3(3.6, 0, 1.4);
 
 function setStatus(text: string, kind: "idle" | "busy" | "error" = "idle"): void {
   slotStatus.textContent = text;
@@ -119,12 +140,55 @@ function populateSelect(catalog: AvatarSlotCatalog, selectedId: string): void {
   slotSelect.value = selectedId;
 }
 
+function renderClockHud(): void {
+  const beat = academyClock.beat;
+  const left = academyClock.beatRemaining.toFixed(1);
+  clockStatus.textContent = `학원 시계 · ${beat} · 다음 비트 ${left}s · ${academyClock.realSecondsPerBeat}s/beat`;
+}
+
+function renderRoster(): void {
+  npcRoster.replaceChildren();
+  for (const agent of agents) {
+    const row = document.createElement("li");
+    const focused = agent.slot.id === focusedSlotId;
+    row.dataset.gait = agent.gait;
+    if (focused) {
+      row.dataset.focus = "on";
+    }
+    row.textContent = `${agentLabel(agent)} · ${agent.gait} → ${agent.targetId}`;
+    npcRoster.append(row);
+  }
+}
+
+function lookAtCampus(): void {
+  followTarget.set(0, 0.4, 1);
+}
+
+function lookAtAgent(agent: NpcAgent): void {
+  const pos = agent.vrm.scene.position;
+  followTarget.set(pos.x, 1.05, pos.z);
+}
+
 async function showSlot(catalog: AvatarSlotCatalog, requestedId: string | null): Promise<void> {
   const slot = findSlot(catalog, requestedId);
   const generation = ++loadGeneration;
+  focusedSlotId = slot.id;
   populateSelect(catalog, slot.id);
   writeSlotQuery(slot.id);
   renderSlotMeta(slot);
+
+  const living = findAgent(agents, slot.id);
+  if (living) {
+    if (currentVrm) {
+      disposeVrm(currentVrm, scene);
+      currentVrm = undefined;
+    }
+    lookAtAgent(living);
+    setStatus(`스케줄 NPC · ${slot.id} · ${living.gait} → ${living.targetId}`, "idle");
+    return;
+  }
+
+  lookAtCampus();
   setStatus("VRM 로드 중…", "busy");
 
   const href = resolveVrmHref(slot);
@@ -150,29 +214,54 @@ async function showSlot(catalog: AvatarSlotCatalog, requestedId: string | null):
   }
 
   currentVrm = next;
+  next.scene.position.copy(PREVIEW_STAND);
+  next.scene.add(makeBillboardLabel(displayNameLabel(slot.displayName), "npc-label", 1.82));
   scene.add(next.scene);
-  frameVrm(next, camera, controls.target);
-  controls.update();
-  setStatus(`로드됨 · ${slot.id}`, "idle");
+  setStatus(`프리뷰 · ${slot.id} (일정 없음 · 슬롯 VRM 교체 가능)`, "idle");
 }
 
 function frame(): void {
   const delta = clock.getDelta();
+  academyClock.tick(delta);
+  for (const agent of agents) {
+    tickAgent(agent, schedule, academyClock, delta);
+  }
   currentVrm?.update(delta);
-  controls.update();
-  renderer.render(scene, camera);
-}
 
-renderer.setAnimationLoop(frame);
+  const focused = findAgent(agents, focusedSlotId);
+  if (focused) {
+    lookAtAgent(focused);
+  }
+  controls.target.lerp(followTarget, 1 - Math.exp(-3 * delta));
+  controls.update();
+  renderClockHud();
+  renderRoster();
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
+}
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  labelRenderer.setSize(window.innerWidth, window.innerHeight);
 });
 
 const catalog = await loadCatalog();
+schedule = await loadSchedule(catalog);
+academyClock = new AcademyClock(schedule.clock);
+addSchedulePlaceholders(scene, schedule.waypoints);
+
+try {
+  setStatus("NPC 3명 로드 중…", "busy");
+  agents = await spawnScheduledAgents(catalog, schedule, scene);
+} catch (error) {
+  const message = error instanceof Error ? error.message : "알 수 없는 오류";
+  setStatus(`NPC 로드 실패: ${message}`, "error");
+}
+
 await showSlot(catalog, slotIdFromSearch());
+renderer.setAnimationLoop(frame);
 
 slotSelect.addEventListener("change", () => {
   void showSlot(catalog, slotSelect.value);

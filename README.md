@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **ground grid**, one **sample VRM**, a slot dropdown, and empty waypoint / box stubs for later NPC schedules.
+Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking different routes (idle/walk), dummy **Classroom / Roof / Gate** boxes plus hub rings, and the slot dropdown (focus a walking NPC, or preview any other catalog face).
 
 ```bash
 npm run build
@@ -54,6 +54,18 @@ Steps:
 4. Refresh. Switch faces with the HUD dropdown, or open `?slot=cadet_iseul` (any locked catalog `id`).
 
 `*.vrm` is gitignored. Local `vrmPath` is for private experiments only — never commit the binary.
+
+### Tweak NPC schedules (no code change)
+
+Runtime reads [`public/npc-schedules.json`](public/npc-schedules.json). This file is **not** the avatar catalog — keep `id` / `vrmUrl` / `license` in [`public/avatar-slots.json`](public/avatar-slots.json).
+
+1. **`clock.realSecondsPerBeat`** — how long each day beat lasts in real seconds (looping timer). Smaller = NPCs change destination more often.
+2. **`clock.beats`** — order of the academy day. Use the locked IDs only: `MORNING` `BRIEF` `BLOCK_A` `MEAL` `BLOCK_B` `FREE` `EOD`.
+3. **`waypoints`** — dummy school nodes. Move `position` `[x, y, z]`, change `label` / `color`, or set `kind` to `ring` (hub pole) or `box` (Classroom / Roof / Gate massing). Existing hub ids from the IA lock: `Talk` `Drill` `Desk` `Bay` `Shop`.
+4. **`agents`** — one entry per walking NPC. `slotId` **must** be a locked cast id (`cadet_iseul`, `cadet_rio`, …). `stops` maps each beat → a waypoint `id`. Give each agent a **different** route so paths stay readable. Optional per-agent `walkSpeed` (m/s) overrides the file-level `walkSpeed`.
+5. **`arriveRadius`** — how close is “arrived” (then they **idle** until the next beat).
+
+Refresh the demo after edits. Slot faces still swap via `vrmUrl` only; schedules never rename slot ids and never load a `.vrm` from git.
 
 ### Sample models in this demo
 
@@ -83,6 +95,7 @@ These are implementation samples, not our cast. Slot `displayName` values stay o
 | [docs/design/ia.md](docs/design/ia.md) | M2 screen map (#4) |
 | [docs/design/vrm-slots.md](docs/design/vrm-slots.md) | Avatar slot convention (#5) |
 | [docs/design/vrm-slots.schema.json](docs/design/vrm-slots.schema.json) | Slot JSON schema (#5) |
+| [public/npc-schedules.json](public/npc-schedules.json) | NPC routes + day-beat clock (#8) |
 
 ## License
 

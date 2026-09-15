@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "clock": {
+    "realSecondsPerBeat": 12,
+    "beats": ["MORNING", "BRIEF", "BLOCK_A", "MEAL", "BLOCK_B", "FREE", "EOD"]
+  },
+  "walkSpeed": 1.55,
+  "arriveRadius": 0.42,
+  "waypoints": [
+    {
+      "id": "Talk",
+      "label": "Talk",
+      "position": [-6, 0, -4],
+      "color": "#6ec8d4",
+      "kind": "ring"
+    },
+    {
+      "id": "Drill",
+      "label": "Drill",
+      "position": [7, 0, -5],
+      "color": "#d4b36e",
+      "kind": "ring"
+    },
+    {
+      "id": "Bay",
+      "label": "Bay",
+      "position": [-2, 0, 8],
+      "color": "#8aa4d4",
+      "kind": "ring"
+    },
+    {
+      "id": "Desk",
+      "label": "Desk",
+      "position": [-8, 0, 2],
+      "color": "#9ad48a",
+      "kind": "ring"
+    },
+    {
+      "id": "Shop",
+      "label": "Shop",
+      "position": [9, 0, 4],
+      "color": "#d48aa4",
+      "kind": "ring"
+    },
+    {
+      "id": "Classroom",
+      "label": "Classroom",
+      "position": [1.2, 0, -8.4],
+      "color": "#7ec8e8",
+      "kind": "box"
+    },
+    {
+      "id": "Roof",
+      "label": "Roof",
+      "position": [-11, 0, -10],
+      "color": "#e0c878",
+      "kind": "box"
+    },
+    {
+      "id": "Gate",
+      "label": "Gate",
+      "position": [0.4, 0, 13.2],
+      "color": "#b8c4d8",
+      "kind": "box"
+    }
+  ],
+  "agents": [
+    {
+      "slotId": "cadet_iseul",
+      "walkSpeed": 1.45,
+      "stops": {
+        "MORNING": "Classroom",
+        "BRIEF": "Classroom",
+        "BLOCK_A": "Talk",
+        "MEAL": "Desk",
+        "BLOCK_B": "Classroom",
+        "FREE": "Talk",
+        "EOD": "Classroom"
+      }
+    },
+    {
+      "slotId": "cadet_rio",
+      "walkSpeed": 1.7,
+      "stops": {
+        "MORNING": "Bay",
+        "BRIEF": "Drill",
+        "BLOCK_A": "Bay",
+        "MEAL": "Gate",
+        "BLOCK_B": "Drill",
+        "FREE": "Bay",
+        "EOD": "Gate"
+      }
+    },
+    {
+      "slotId": "cadet_minjae",
+      "walkSpeed": 1.6,
+      "stops": {
+        "MORNING": "Roof",
+        "BRIEF": "Shop",
+        "BLOCK_A": "Roof",
+        "MEAL": "Gate",
+        "BLOCK_B": "Shop",
+        "FREE": "Roof",
+        "EOD": "Shop"
+      }
+    }
+  ]
+}
