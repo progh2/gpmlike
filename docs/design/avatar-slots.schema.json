@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/progh2/gpmlike/docs/design/avatar-slots.schema.json",
+  "title": "Nuri Term avatar slots",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "slots"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 1 },
+    "slots": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/slot" }
+    }
+  },
+  "$defs": {
+    "slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "vrm"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "displayName": {
+          "type": "object",
+          "required": ["ko", "en"],
+          "additionalProperties": false,
+          "properties": {
+            "ko": { "type": "string", "minLength": 1 },
+            "en": { "type": "string", "minLength": 1 }
+          }
+        },
+        "vrm": { "$ref": "#/$defs/vrmLocator" }
+      }
+    },
+    "vrmLocator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["license", "status"],
+      "properties": {
+        "href": { "type": ["string", "null"] },
+        "license": { "type": "string", "minLength": 1 },
+        "licenseUrl": { "type": "string" },
+        "sourceName": { "type": "string" },
+        "sourceUrl": { "type": "string" },
+        "attribution": { "type": "string" },
+        "status": { "enum": ["placeholder", "ready"] }
+      }
+    }
+  }
+}

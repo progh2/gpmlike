@@ -40,6 +40,14 @@
 
 ---
 
+## Avatar / tooling (for #5, not GPM)
+
+| URL | Accessed note | One-line |
+| --- | --- | --- |
+| https://vroid.pixiv.help/hc/en-us/articles/4402614652569-Do-VRoid-Studio-s-sample-models-come-with-conditions-of-use | Fetched 2026-09-15 UTC | Official: β AvatarSample_1–4 are CC0; A–C have separate terms. |
+
+---
+
 ## Hard exclusions (not collected)
 
 - Character dialogue scripts / full conversation trees  

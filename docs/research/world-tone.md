@@ -64,3 +64,9 @@ Do **not** borrow: Black Moon mythology dumps, specific clan politics, trademark
 > If a feature doesn’t change either **today’s calendar choice** or **tomorrow’s pressure**, it’s probably flavor — ship later.
 
 > 오늘 캘린더 선택이나 내일 압력에 안 닿으면 플레이버 — 나중.
+
+---
+
+## 6. Our fiction (not this file)
+
+Original setting, names, and academy copy live in [`docs/design/original-pitch.md`](../design/original-pitch.md). This page stays systems-facing tone only.
