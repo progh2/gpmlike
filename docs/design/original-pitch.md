@@ -48,6 +48,14 @@ These are **ours**. Do not replace them with names from another cast.
 
 Avatars are **VRM slots**, not these faces. See `vrm-slots.md`.
 
+## Systems (pointers)
+
+- Day beats: [`docs/research/day-loop.md`](../research/day-loop.md) (`MORNING`…`EOD`, `CRISIS`)
+- Stat / relation IDs: [`stats-and-relations.md`](stats-and-relations.md) (`Body`, `Drive`, `Voice`, `Trust`…)
+- What to borrow vs invent: [`design-implications.md`](design-implications.md)
+
+Display copy can stay Korean (활력, 영향력) — **code IDs** are the English keys in the stats doc.
+
 ## Fantasy and win
 
 Survive the **term** with the workshop still open and people still speaking. Combat wins are local. A “good run” can be a quiet mechanic.

@@ -40,14 +40,15 @@ npm run preview
 | Path | What |
 | --- | --- |
 | [docs/LEGAL.md](docs/LEGAL.md) | Copyright boundary checklist |
-| [docs/research/SOURCES.md](docs/research/SOURCES.md) | Public URLs only |
+| [docs/research/SOURCES.md](docs/research/SOURCES.md) | Public URLs + access dates (#1) |
 | [docs/research/systems-overview.md](docs/research/systems-overview.md) | Calendar / stats / relations / combat / map |
-| [docs/research/world-tone.md](docs/research/world-tone.md) | Our tone, not theirs |
-| [docs/research/anime-vs-game.md](docs/research/anime-vs-game.md) | Media-difference stub |
-| [docs/research/day-loop.md](docs/research/day-loop.md) | Our period schedule (#2) |
-| [docs/design/original-pitch.md](docs/design/original-pitch.md) | Original setting |
-| [docs/design/stats-and-relations.md](docs/design/stats-and-relations.md) | Original stat names |
-| [docs/design/vrm-slots.md](docs/design/vrm-slots.md) | Avatar JSON convention |
+| [docs/research/world-tone.md](docs/research/world-tone.md) | Tone & pressure (no cast names) |
+| [docs/research/anime-vs-game.md](docs/research/anime-vs-game.md) | Game vs 2003 TV |
+| [docs/research/day-loop.md](docs/research/day-loop.md) | Reference shape + original beats (#2) |
+| [docs/design/design-implications.md](docs/design/design-implications.md) | Borrow vs invent |
+| [docs/design/original-pitch.md](docs/design/original-pitch.md) | Nuri Term setting (original names) |
+| [docs/design/stats-and-relations.md](docs/design/stats-and-relations.md) | Original parameter IDs (#2) |
+| [docs/design/vrm-slots.md](docs/design/vrm-slots.md) | Avatar JSON convention (#5) |
 
 ## License
 

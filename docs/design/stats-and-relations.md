@@ -1,77 +1,104 @@
-# Stats and relations (ours)
+# stats-and-relations.md — Original parameters for gpmlike
+# 스탯·관계 (오리지널 이름·범위)
 
-Original parameter names for **Nuri Term**. Do not paste another game’s labels into code.
+**#2 deliverable.** Inspired by GPM *shapes* (JP Wikipedia systems + Kimimi).  
+**Do not** ship GPM Japanese stat names (体力/気力/…) or cast names in product UI.
 
-Issue #2 asked for a rewrite of the *loop*, not a translation of a stat block.
+Fiction / academy names: [`original-pitch.md`](original-pitch.md). Day beats: [`../research/day-loop.md`](../research/day-loop.md).
 
-## Player / NPC vitals
+---
 
-All current values are `0–100` unless noted. `max` can grow slowly (cap `150`).
+## 1. Core vitals · 핵심 바이탈
 
-| Key | KO | Range | Recovers | Used for |
+| ID | Range | Recover | Decay | Used for |
 | --- | --- | --- | --- | --- |
-| `vigor` | 활력 | 0–max | Sleep, food | Fatigue, light scuffles, scout HP analog |
-| `composure` | 침착 | 0–max | Rest, quiet roof | Spending on hard tasks and combat intents |
-| `agility` | 민첩 | 0–max | Decays ~1/day if unused | Hit / evade, late-run errands |
-| `insight` | 통찰 | 0–max | Decays if unused | Study, repair quality, comms reads |
-| `presence` | 존재감 | 0–max | Decays if unused | Talk success; too high → more interruptions |
-| `morale` | 전의 | 0–100 | Wins, shared meals | NPC diligence and whether they volunteer |
-| `pull` | 영향력 | integer, can go negative | Duty, grades, watches | Spend on briefs and supply asks |
+| `Body` | 0–1000 (soft cap 100) | Rest, food | Duty/drill/fight spend | Scout HP; fight power; faint if &lt;10% max → forced rest day |
+| `Drive` | 0–1000 (soft cap 100) | Rest | Actions, programs, heavy talk | Sortie action budget; daily activity |
+| `Focus` | 0–100 | Drill, study | **−N per calendar day** | Hit/evade; desk efficiency |
+| `Mind` | 0–100 | Study, desk work | **−N per day** | Command/mechanic quality; exams |
+| `Presence` | 0–100 | Social drill | **−N per day** | Proposal success & bond gains; **too high → constant interrupts** |
+| `Morale` | 0–100 | Wins, pep proposals, items | Losses, jealousy, punishment | NPC diligence & frontline aggression |
 
-`pull` is social budget, not money. Money (if any) is a separate later `scrip` integer.
+**Design note:** Soft cap ~100 for readable web UI; allow overflow items later like GPM’s high ceilings without copying numbers 1:1.
 
-## Craft tags (skills)
+---
 
-Integer ranks `0–5`. Unlock duties; do **not** reuse another title’s skill list.
+## 2. Soft currency · 소프트 화폐
 
-| Key | KO | Unlocks / bonus |
-| --- | --- | --- |
-| `frameOps` | 프레임운용 | Shoreframe duty |
-| `fieldcraft` | 야전술 | Wall scout, night watches |
-| `repair` | 정비 | Tender desk, frame seals |
-| `firstAid` | 응급 | Clinic shifts |
-| `rhetoric` | 설득 | Brief success |
-| `nightWatch` | 야간경계 | Alert periods |
-| `logistics` | 보급 | Supply asks cost less Pull |
-
-Teaching: if A.rank ≥ B.rank + 1 and they share a drill, B may gain +progress (not an instant rank).
-
-## Relations (directed)
-
-`fromId → toId`. Asymmetric on purpose.
-
-| Key | KO | Range | Meaning |
+| ID | Earn | Spend | Floor effect |
 | --- | --- | --- | --- |
-| `familiarity` | 친숙 | 0–100 | How well they can read each other |
-| `trust` | 신뢰 | −50–100 | Will they take a risky brief |
-| `friction` | 마찰 | 0–100 | Interrupts, rejected talks |
-| `dutyBond` | 당직유대 | 0–100 | Shared watches; combat assist chance |
+| `Voice` | Rank stipend each BRIEF, good duty grades, sortie results, medals(*original*) | Talk proposals, petitions, pressure in meetings | `Voice &lt; 0` → cannot propose; rumor penalty risk |
 
-Romance / dating flags are **out of scope** until a later milestone. Do not add a second “love meter” that mirrors another game.
+**Anti-snowball:** daily stipend capped by rank; repeated same topic same day costs more / lowers success.
 
-## Example JSON
+---
 
-```json
-{
-  "id": "cadet_iseul",
-  "vitals": {
-    "vigor": { "current": 72, "max": 90 },
-    "composure": { "current": 64, "max": 80 },
-    "agility": 41,
-    "insight": 55,
-    "presence": 38,
-    "morale": 60,
-    "pull": 120
-  },
-  "craft": { "frameOps": 1, "repair": 0, "rhetoric": 2 },
-  "relations": {
-    "cadet_player": { "familiarity": 12, "trust": 4, "friction": 0, "dutyBond": 8 }
-  }
-}
-```
+## 3. Skills (shape only) · 스킬 골격
 
-## Decay and floors (draft)
+- Learned at **hub nodes** (Drill spots), peer teach (teacher level ≥ learner+1), rare class rolls.  
+- Gate **Role** transfers: `Pilot` / `Scout` / `Lead` / `Wrench` / `Ops` / `Medic`.  
+- Invent skill IDs (`NightEye`, `CloseQuarters`, `Rally`, `PatchKit`…) — never port GPM skill proper names.
 
-- `agility`, `insight`, `presence`: −1 at `lights-out` if that stat was not trained that day.
-- `vigor` / `composure` current < 10% of max → next `morning` is **forced rest** (skip class).
-- `pull` < 0 → briefs fail; gossip penalty (−familiarity from a random NPC).
+---
+
+## 4. Relationships · 관계
+
+### Axes (bidirectional)
+
+| Edge | Type | Notes |
+| --- | --- | --- |
+| `Trust[A→B]` | −100…+100 | Friendship / reliability |
+| `Bond[A→B]` | 0…100 | Romance-capable axis (opt-in content flag) |
+
+- `Trust[A→B] ≠ Trust[B→A]`.  
+- **Reciprocity gate:** unlock teach-proposal / teach-sortie-verb only if both Trust (or Bond) within Δ of each other.  
+- One-sided high Bond → jealousy risk when both targets share a map node (`Clash` event): Morale−, Voice−, mood→`Awkward`.
+
+### Gaze (UI)
+
+- Colored look-lines (interest / cold / warm). Being stared at opens micro-reactions: smile / nod / ignore / leave.  
+- Privacy toggle for accessibility.
+
+### Scene mood tags (original labels)
+
+`Neutral` · `Serious` · `Bright` · `Low` · `Drained` · `Awkward` · `Intimate`
+
+Presence of roles/moods **locks** some proposal verbs (e.g. Serious blocks “goof off date”).
+
+---
+
+## 5. Roles · 역할
+
+| Role | Day verbs | Sortie verbs |
+| --- | --- | --- |
+| `Pilot` | Bay tune | Unit control |
+| `Scout` | Ground drill | Fragile high-agency infantry |
+| `Lead` | Desk + petition | Support car / orders |
+| `Wrench` | Repair / upgrade | Indirect readiness |
+| `Ops` | Comms | Watch + callouts |
+| `Medic` | Hygiene / aid | Support |
+
+Caps per role → chain reassignment when petitions succeed (politics).
+
+---
+
+## 6. Mapping from research → ours (internal only)
+
+| Research concept (do not show in UI) | gpmlike ID |
+| --- | --- |
+| Stamina / 体力 | `Body` |
+| Spirit / 気力 | `Drive` |
+| Athletics / 運動力 | `Focus` |
+| Intellect / 知力 | `Mind` |
+| Charm / 魅力 | `Presence` |
+| Morale / 士気 | `Morale` |
+| Speech power / 発言力 | `Voice` |
+| Friendship / affection | `Trust` / `Bond` |
+
+---
+
+## 7. Out of scope for this file
+
+- Exact medal tables, item lists, Action Code alphabets  
+- Named romance routes  
+- Full Karel AI spec (see systems-overview + design-implications)
