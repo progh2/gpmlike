@@ -14,6 +14,13 @@ export const DAY_BEATS = [
 
 export type DayBeat = (typeof DAY_BEATS)[number];
 
+/** Locked in docs/design/ia.md §3 — no extra place/screen ids. */
+export const HUB_NODE_IDS = ["Talk", "Drill", "Desk", "Bay", "Shop"] as const;
+
+export type HubNodeId = (typeof HUB_NODE_IDS)[number];
+
+const hubNodeIdSet = new Set<string>(HUB_NODE_IDS);
+
 export type WaypointKind = "ring" | "box";
 
 export type WaypointDef = {
@@ -83,6 +90,11 @@ export function assertSchedule(
     if (!waypoint.id?.trim()) {
       throw new Error("waypoint id가 필요합니다.");
     }
+    if (!hubNodeIdSet.has(waypoint.id)) {
+      throw new Error(
+        `waypoint id는 IA 허브 노드만 허용합니다 (Talk Drill Desk Bay Shop). 거부됨: ${waypoint.id}`,
+      );
+    }
     if (waypointIds.has(waypoint.id)) {
       throw new Error(`waypoint id가 중복됩니다: ${waypoint.id}`);
     }
@@ -93,6 +105,11 @@ export function assertSchedule(
     if (!Array.isArray(waypoint.position) || waypoint.position.length !== 3) {
       throw new Error(`waypoint ${waypoint.id}: position은 [x,y,z]여야 합니다.`);
     }
+  }
+
+  const missingHub = HUB_NODE_IDS.filter((id) => !waypointIds.has(id));
+  if (missingHub.length > 0) {
+    throw new Error(`IA 허브 노드가 빠졌습니다: ${missingHub.join(", ")}`);
   }
 
   if (!Array.isArray(data.agents) || data.agents.length < 3) {
@@ -121,14 +138,21 @@ export function assertSchedule(
       if (!stop) {
         throw new Error(`${agent.slotId}: beat ${beat}에 waypoint가 없습니다.`);
       }
-      if (!waypointIds.has(stop)) {
-        throw new Error(`${agent.slotId}: 알 수 없는 waypoint ${stop}`);
+      if (!hubNodeIdSet.has(stop) || !waypointIds.has(stop)) {
+        throw new Error(`${agent.slotId}: 목적지는 Talk/Drill/Desk/Bay/Shop만 가능합니다 (${stop})`);
       }
       used.add(stop);
     }
     if (used.size < 2) {
       throw new Error(`${agent.slotId}: 루트에 waypoint가 2곳 이상 있어야 합니다.`);
     }
+  }
+
+  const signatures = data.agents.map((agent) =>
+    data.clock.beats.map((beat) => agent.stops[beat]).join(">"),
+  );
+  if (new Set(signatures).size < 3) {
+    throw new Error("서로 다른 허브 루트의 NPC가 3명 이상 있어야 합니다.");
   }
 
   return data;

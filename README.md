@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking different routes (idle/walk), dummy **Classroom / Roof / Gate** boxes plus hub rings, and the slot dropdown (focus a walking NPC, or preview any other catalog face).
+Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking different IA hub routes (`Talk` `Drill` `Desk` `Bay` `Shop`), idle/walk, and the slot dropdown (focus a walking NPC, or preview any other catalog face).
 
 ```bash
 npm run build
@@ -61,8 +61,8 @@ Runtime reads [`public/npc-schedules.json`](public/npc-schedules.json). This fil
 
 1. **`clock.realSecondsPerBeat`** — how long each day beat lasts in real seconds (looping timer). Smaller = NPCs change destination more often.
 2. **`clock.beats`** — order of the academy day. Use the locked IDs only: `MORNING` `BRIEF` `BLOCK_A` `MEAL` `BLOCK_B` `FREE` `EOD`.
-3. **`waypoints`** — dummy school nodes. Move `position` `[x, y, z]`, change `label` / `color`, or set `kind` to `ring` (hub pole) or `box` (Classroom / Roof / Gate massing). Existing hub ids from the IA lock: `Talk` `Drill` `Desk` `Bay` `Shop`.
-4. **`agents`** — one entry per walking NPC. `slotId` **must** be a locked cast id (`cadet_iseul`, `cadet_rio`, …). `stops` maps each beat → a waypoint `id`. Give each agent a **different** route so paths stay readable. Optional per-agent `walkSpeed` (m/s) overrides the file-level `walkSpeed`.
+3. **`waypoints`** — **only** the locked Hub node IDs from [`docs/design/ia.md`](docs/design/ia.md): `Talk` `Drill` `Desk` `Bay` `Shop`. No extra place/screen ids (no Classroom / Roof / Gate, no GPM names). You may move `position` `[x, y, z]` or change `label` / `color` / `kind` (`ring` pole or `box` marker) — do not rename the `id`.
+4. **`agents`** — one entry per walking NPC. `slotId` **must** be a locked cast id (`cadet_iseul`, `cadet_rio`, …). `stops` maps each day beat (`MORNING` → `EOD`) → one of those five hub ids. Give each agent a **different** route. Optional per-agent `walkSpeed` (m/s) overrides the file-level `walkSpeed`.
 5. **`arriveRadius`** — how close is “arrived” (then they **idle** until the next beat).
 
 Refresh the demo after edits. Slot faces still swap via `vrmUrl` only; schedules never rename slot ids and never load a `.vrm` from git.
