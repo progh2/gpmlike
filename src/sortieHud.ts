@@ -67,10 +67,9 @@ function renderHp(current: number, max: number): HTMLElement {
 }
 
 function renderUnitCard(
-  nameKo: string,
-  nameEn: string,
-  kindKo: string,
-  kindEn: string,
+  id: string,
+  roleKo: string,
+  roleEn: string,
   hp: number,
   max: number,
   side: "player" | "scout" | "enemy",
@@ -79,9 +78,9 @@ function renderUnitCard(
   card.className = "sortie-unit";
   card.dataset.side = side;
   const title = document.createElement("strong");
-  title.textContent = `${nameKo} / ${nameEn}`;
+  title.textContent = id;
   const kind = document.createElement("span");
-  kind.textContent = `${kindKo} · ${kindEn}`;
+  kind.textContent = `${roleKo} / ${roleEn}`;
   card.append(title, kind, renderHp(hp, max));
   return card;
 }
@@ -100,13 +99,13 @@ export function renderSortieHud(
     item.className = "sortie-cell";
     if (state.playerHp > 0 && state.playerCell === cell) {
       item.dataset.player = "on";
-      item.textContent = PLAYER_UNIT.nameKo;
+      item.textContent = PLAYER_UNIT.id;
     } else if (state.scoutHp > 0 && state.scoutCell === cell) {
       item.dataset.scout = "on";
-      item.textContent = SCOUT_UNIT.nameKo;
+      item.textContent = SCOUT_UNIT.id;
     } else if (state.enemyHp > 0 && state.enemyCell === cell) {
       item.dataset.enemy = "on";
-      item.textContent = ENEMY_UNIT.nameKo;
+      item.textContent = ENEMY_UNIT.id;
     } else {
       item.textContent = String(cell + 1);
     }
@@ -115,28 +114,25 @@ export function renderSortieHud(
 
   hud.units.replaceChildren(
     renderUnitCard(
-      PLAYER_UNIT.nameKo,
-      PLAYER_UNIT.nameEn,
-      PLAYER_UNIT.kindKo,
-      PLAYER_UNIT.kindEn,
+      PLAYER_UNIT.id,
+      PLAYER_UNIT.roleKo,
+      PLAYER_UNIT.roleEn,
       state.playerHp,
       PLAYER_UNIT.maxHp,
       "player",
     ),
     renderUnitCard(
-      SCOUT_UNIT.nameKo,
-      SCOUT_UNIT.nameEn,
-      SCOUT_UNIT.kindKo,
-      SCOUT_UNIT.kindEn,
+      SCOUT_UNIT.id,
+      SCOUT_UNIT.roleKo,
+      SCOUT_UNIT.roleEn,
       state.scoutHp,
       SCOUT_UNIT.maxHp,
       "scout",
     ),
     renderUnitCard(
-      ENEMY_UNIT.nameKo,
-      ENEMY_UNIT.nameEn,
-      ENEMY_UNIT.kindKo,
-      ENEMY_UNIT.kindEn,
+      ENEMY_UNIT.id,
+      ENEMY_UNIT.roleKo,
+      ENEMY_UNIT.roleEn,
       state.enemyHp,
       ENEMY_UNIT.maxHp,
       "enemy",

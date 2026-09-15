@@ -296,12 +296,14 @@ canvas {
   border-color: #9ad8e0;
 }
 
-body[data-sortie="on"] #day-hud {
+body[data-sortie="on"] #day-hud,
+body[data-bay="on"] #day-hud {
   visibility: hidden;
   pointer-events: none;
 }
 
-#sortie-overlay {
+#sortie-overlay,
+#bay-overlay {
   position: fixed;
   inset: 0;
   z-index: 4;
@@ -313,11 +315,13 @@ body[data-sortie="on"] #day-hud {
 }
 
 #sortie-overlay[hidden],
+#bay-overlay[hidden],
 .sortie-footer button[hidden] {
   display: none !important;
 }
 
-#sortie-hud {
+#sortie-hud,
+#bay-hud {
   width: min(520px, calc(100vw - 24px));
   max-height: calc(100vh - 48px);
   overflow: auto;
@@ -338,9 +342,25 @@ body[data-sortie="on"] #day-hud {
   color: #9fb1c0;
 }
 
-#sortie-map {
+#sortie-map,
+#bay-note {
   margin: 0;
   color: #c5d8c4;
+}
+
+#bay-close {
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid #3a4d5c;
+  border-radius: 4px;
+  background: #121820;
+  color: #e8f0f6;
+  font: inherit;
+  cursor: pointer;
+}
+
+#bay-close:hover {
+  border-color: #6ec8d4;
 }
 
 #sortie-lane {

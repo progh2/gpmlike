@@ -116,6 +116,8 @@ const npcRoster = requireElement<HTMLElement>("#npc-roster");
 const dayHud: DayHudElements = bindDayHud();
 const sortieHud: SortieHudElements = bindSortieHud();
 const daySortie = requireElement<HTMLButtonElement>("#day-sortie");
+const bayOverlay = requireElement<HTMLElement>("#bay-overlay");
+const bayClose = requireElement<HTMLButtonElement>("#bay-close");
 
 const clock = new THREE.Clock();
 const followTarget = new THREE.Vector3();
@@ -227,10 +229,27 @@ function paintSortie(): void {
   renderSortieHud(sortieHud, sortie, chooseSortieAction, stepSortieAuto);
 }
 
+function setBayOpen(open: boolean): void {
+  bayOverlay.hidden = !open;
+  document.body.dataset.bay = open ? "on" : "off";
+}
+
+function openBayGear(): void {
+  if (sortie) {
+    return;
+  }
+  setBayOpen(true);
+}
+
+function closeBayGear(): void {
+  setBayOpen(false);
+}
+
 function openSortie(): void {
   if (sortie) {
     return;
   }
+  closeBayGear();
   resumeBeat = session.beat;
   sortie = createSortie();
   setSortieOpen(sortieHud, true);
@@ -283,7 +302,7 @@ const pickRay = new THREE.Raycaster();
 const pickPointer = new THREE.Vector2();
 
 function onCampusPointerDown(event: PointerEvent): void {
-  if (sortie || event.button !== 0 || event.target !== renderer.domElement) {
+  if (sortie || document.body.dataset.bay === "on" || event.button !== 0 || event.target !== renderer.domElement) {
     return;
   }
   pickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -291,7 +310,7 @@ function onCampusPointerDown(event: PointerEvent): void {
   pickRay.setFromCamera(pickPointer, camera);
   const hit = pickRay.intersectObjects(hubPickables(), false)[0];
   if (hit?.object.userData.hubId === "Bay") {
-    openSortie();
+    openBayGear();
   }
 }
 
@@ -434,8 +453,13 @@ sortieHud.leave.addEventListener("click", () => {
   closeSortie();
 });
 
+bayClose.addEventListener("click", () => {
+  closeBayGear();
+});
+
 renderer.domElement.addEventListener("pointerdown", onCampusPointerDown);
 
-if (new URLSearchParams(window.location.search).has("sortie")) {
+const startQuery = new URLSearchParams(window.location.search);
+if (startQuery.has("crisis") || startQuery.has("sortie")) {
   openSortie();
 }

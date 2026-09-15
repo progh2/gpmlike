@@ -2,48 +2,49 @@
 
 export const LANE_LENGTH = 5;
 
+/** Locked unit IDs: allies Shoreframe + WallScout; one enemy dummy Seamkin. */
 export const PLAYER_UNIT = {
-  id: "brineknee",
-  nameKo: "브라인니",
-  nameEn: "Brineknee",
-  kindKo: "쇼어프레임",
-  kindEn: "Shoreframe",
+  id: "Shoreframe",
+  nameKo: "쇼어프레임",
+  nameEn: "Shoreframe",
+  roleKo: "아군",
+  roleEn: "ally",
   maxHp: 22,
   strike: 7,
 } as const;
 
 export const SCOUT_UNIT = {
-  id: "kelpwalk",
-  nameKo: "켈프워크",
-  nameEn: "Kelpwalk",
-  kindKo: "해벽정찰",
-  kindEn: "WallScout",
+  id: "WallScout",
+  nameKo: "해벽정찰",
+  nameEn: "WallScout",
+  roleKo: "아군 Auto",
+  roleEn: "ally Auto",
   maxHp: 12,
   strike: 4,
 } as const;
 
 export const ENEMY_UNIT = {
-  id: "fathomtick",
-  nameKo: "패덤틱",
-  nameEn: "Fathomtick",
-  kindKo: "틈새",
-  kindEn: "Seamkin",
+  id: "Seamkin",
+  nameKo: "틈새",
+  nameEn: "Seamkin",
+  roleKo: "적 dummy",
+  roleEn: "enemy dummy",
   maxHp: 16,
   strike: 5,
 } as const;
 
 export const SORTIE_COPY = {
   screenId: "SortieLite",
-  mapKo: "솔트래치 절개",
-  mapEn: "Saltlatch Cut",
-  watchKo: "3번 당직",
-  watchEn: "Third Watch",
-  openKo: "사이렌. 켈프워크가 해벽을 잡고, 패덤틱이 절개로 올라온다.",
-  openEn: "Siren. Kelpwalk holds the wall as a Fathomtick climbs the cut.",
-  winKo: "패덤틱이 단층 쪽으로 물러난다. 당직 종료.",
-  winEn: "The Fathomtick slips back toward the fault. Watch ends.",
-  loseKo: "브라인니가 기댄다. 당직은 여기서 끊긴다.",
-  loseEn: "Brineknee kneels. The watch cuts out here.",
+  mapKo: "해벽 절개",
+  mapEn: "seawall cut",
+  watchKo: "CRISIS",
+  watchEn: "SortieLite Auto",
+  openKo: "사이렌. CRISIS → SortieLite. WallScout가 해벽을 잡고 Seamkin dummy가 올라온다.",
+  openEn: "Siren. CRISIS → SortieLite. WallScout holds the wall; one Seamkin dummy climbs.",
+  winKo: "Seamkin dummy가 물러난다. 직전 beat로 복귀.",
+  winEn: "The Seamkin dummy withdraws. Return to the previous beat.",
+  loseKo: "Shoreframe이 기댄다. 직전 beat로 복귀.",
+  loseEn: "Shoreframe kneels. Return to the previous beat.",
 } as const;
 
 export type SortieAction = "advance" | "withdraw" | "strike" | "hold";
@@ -189,19 +190,19 @@ function applyScout(state: SortieState, partsKo: string[], partsEn: string[]): v
   }
   if (areAdjacent(state.scoutCell, state.enemyCell)) {
     state.enemyHp = Math.max(0, state.enemyHp - SCOUT_UNIT.strike);
-    partsKo.push(`켈프워크 타격 −${SCOUT_UNIT.strike}`);
-    partsEn.push(`Kelpwalk strikes −${SCOUT_UNIT.strike}`);
+    partsKo.push(`${SCOUT_UNIT.id} 타격 −${SCOUT_UNIT.strike}`);
+    partsEn.push(`${SCOUT_UNIT.id} strikes −${SCOUT_UNIT.strike}`);
     return;
   }
   const next = tryStep(state.scoutCell, state.enemyCell, blockedCells(state, "scout"));
   if (next !== null) {
     state.scoutCell = next;
-    partsKo.push("켈프워크 전진");
-    partsEn.push("Kelpwalk advances");
+    partsKo.push(`${SCOUT_UNIT.id} 전진`);
+    partsEn.push(`${SCOUT_UNIT.id} advances`);
     return;
   }
-  partsKo.push("켈프워크 대기");
-  partsEn.push("Kelpwalk holds");
+  partsKo.push(`${SCOUT_UNIT.id} 대기`);
+  partsEn.push(`${SCOUT_UNIT.id} holds`);
 }
 
 function applyEnemy(state: SortieState, partsKo: string[], partsEn: string[]): void {
@@ -210,32 +211,32 @@ function applyEnemy(state: SortieState, partsKo: string[], partsEn: string[]): v
   }
   if (playerEnemyAdjacent(state)) {
     state.playerHp = Math.max(0, state.playerHp - ENEMY_UNIT.strike);
-    partsKo.push(`패덤틱 타격 −${ENEMY_UNIT.strike}`);
-    partsEn.push(`Fathomtick strikes −${ENEMY_UNIT.strike}`);
+    partsKo.push(`${ENEMY_UNIT.id} dummy 타격 −${ENEMY_UNIT.strike}`);
+    partsEn.push(`${ENEMY_UNIT.id} dummy strikes −${ENEMY_UNIT.strike}`);
     return;
   }
   if (living(state.scoutHp) && areAdjacent(state.enemyCell, state.scoutCell)) {
     state.scoutHp = Math.max(0, state.scoutHp - ENEMY_UNIT.strike);
-    partsKo.push(`패덤틱이 켈프워크를 친다 −${ENEMY_UNIT.strike}`);
-    partsEn.push(`Fathomtick hits Kelpwalk −${ENEMY_UNIT.strike}`);
+    partsKo.push(`${ENEMY_UNIT.id} dummy가 ${SCOUT_UNIT.id}를 친다 −${ENEMY_UNIT.strike}`);
+    partsEn.push(`${ENEMY_UNIT.id} dummy hits ${SCOUT_UNIT.id} −${ENEMY_UNIT.strike}`);
     return;
   }
   const next = tryStep(state.enemyCell, state.playerCell, blockedCells(state, "enemy"));
   if (next !== null) {
     state.enemyCell = next;
-    partsKo.push("패덤틱 전진");
-    partsEn.push("Fathomtick advances");
+    partsKo.push(`${ENEMY_UNIT.id} dummy 전진`);
+    partsEn.push(`${ENEMY_UNIT.id} dummy advances`);
     return;
   }
-  partsKo.push("패덤틱 대기");
-  partsEn.push("Fathomtick holds");
+  partsKo.push(`${ENEMY_UNIT.id} dummy 대기`);
+  partsEn.push(`${ENEMY_UNIT.id} dummy holds`);
 }
 
 function applyPlayer(state: SortieState, action: SortieAction, partsKo: string[], partsEn: string[]): void {
   if (action === "strike") {
     state.enemyHp = Math.max(0, state.enemyHp - PLAYER_UNIT.strike);
-    partsKo.push(`브라인니 타격 −${PLAYER_UNIT.strike}`);
-    partsEn.push(`Brineknee strikes −${PLAYER_UNIT.strike}`);
+    partsKo.push(`${PLAYER_UNIT.id} 타격 −${PLAYER_UNIT.strike}`);
+    partsEn.push(`${PLAYER_UNIT.id} strikes −${PLAYER_UNIT.strike}`);
     return;
   }
   if (action === "advance") {
@@ -243,8 +244,8 @@ function applyPlayer(state: SortieState, action: SortieAction, partsKo: string[]
     if (next !== null) {
       state.playerCell = next;
     }
-    partsKo.push("브라인니 전진");
-    partsEn.push("Brineknee advances");
+    partsKo.push(`${PLAYER_UNIT.id} 전진`);
+    partsEn.push(`${PLAYER_UNIT.id} advances`);
     return;
   }
   if (action === "withdraw") {
@@ -252,12 +253,12 @@ function applyPlayer(state: SortieState, action: SortieAction, partsKo: string[]
     if (next !== null) {
       state.playerCell = next;
     }
-    partsKo.push("브라인니 후퇴");
-    partsEn.push("Brineknee withdraws");
+    partsKo.push(`${PLAYER_UNIT.id} 후퇴`);
+    partsEn.push(`${PLAYER_UNIT.id} withdraws`);
     return;
   }
-  partsKo.push("브라인니 대기");
-  partsEn.push("Brineknee holds");
+  partsKo.push(`${PLAYER_UNIT.id} 대기`);
+  partsEn.push(`${PLAYER_UNIT.id} holds`);
 }
 
 export function playAction(state: SortieState, action: SortieAction): { ok: true } | { ok: false; reasonKo: string; reasonEn: string } {
