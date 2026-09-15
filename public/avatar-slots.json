@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "slots": [
+    {
+      "id": "cadet_player",
+      "displayName": { "ko": "서하늘", "en": "Seo Haneul" },
+      "vrm": {
+        "href": null,
+        "license": "CC0-1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "sourceName": "VRoid Studio β AvatarSample_1",
+        "sourceUrl": "https://vroid.pixiv.help/hc/en-us/articles/360012381793",
+        "attribution": "pixiv Inc. (CC0 sample)",
+        "status": "placeholder"
+      }
+    },
+    {
+      "id": "cadet_iseul",
+      "displayName": { "ko": "한이슬", "en": "Han Iseul" },
+      "vrm": {
+        "href": null,
+        "license": "CC0-1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "sourceName": "VRoid Studio β AvatarSample_2",
+        "sourceUrl": "https://vroid.pixiv.help/hc/en-us/articles/360014900273",
+        "attribution": "pixiv Inc. (CC0 sample)",
+        "status": "placeholder"
+      }
+    },
+    {
+      "id": "cadet_rio",
+      "displayName": { "ko": "리오 베일", "en": "Rio Vale" },
+      "vrm": {
+        "href": null,
+        "license": "CC0-1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "sourceName": "VRoid Studio β AvatarSample_3",
+        "sourceUrl": "https://vroid.pixiv.help/hc/en-us/articles/360014900113",
+        "attribution": "pixiv Inc. (CC0 sample)",
+        "status": "placeholder"
+      }
+    },
+    {
+      "id": "cadet_minjae",
+      "displayName": { "ko": "박민재", "en": "Park Minjae" },
+      "vrm": {
+        "href": null,
+        "license": "CC0-1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "sourceName": "VRoid Studio β AvatarSample_4",
+        "sourceUrl": "https://vroid.pixiv.help/hc/en-us/articles/360014900233",
+        "attribution": "pixiv Inc. (CC0 sample)",
+        "status": "placeholder"
+      }
+    },
+    {
+      "id": "staff_nari",
+      "displayName": { "ko": "조나리", "en": "Cho Nari" },
+      "vrm": {
+        "href": null,
+        "license": "CC0-1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "sourceName": "VRoid Studio β AvatarSample_1 (placeholder until adult-clear model)",
+        "sourceUrl": "https://vroid.pixiv.help/hc/en-us/articles/360012381793",
+        "attribution": "pixiv Inc. (CC0 sample)",
+        "status": "placeholder"
+      }
+    }
+  ]
+}
