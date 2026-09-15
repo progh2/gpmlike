@@ -16,6 +16,7 @@ import {
   destinationFor,
   findWaypoint,
 } from "./npcSchedule";
+import { makeBillboardLabel } from "./placeholders";
 
 export type AgentGait = "idle" | "walk";
 
@@ -49,6 +50,7 @@ export async function spawnScheduledAgents(
       const firstStop = destinationFor(plan, schedule.clock.beats[0]);
       const start = waypointVector(schedule, firstStop);
       vrm.scene.position.copy(start);
+      vrm.scene.add(makeBillboardLabel(displayNameLabel(slot.displayName), "npc-label", 1.82));
       scene.add(vrm.scene);
       return {
         slot,

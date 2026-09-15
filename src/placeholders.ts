@@ -1,5 +1,15 @@
 import * as THREE from "three";
+import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
 import type { WaypointDef } from "./npcSchedule";
+
+export function makeBillboardLabel(text: string, className: string, y = 1.85): CSS2DObject {
+  const el = document.createElement("div");
+  el.className = className;
+  el.textContent = text;
+  const label = new CSS2DObject(el);
+  label.position.set(0, y, 0);
+  return label;
+}
 
 function colorOf(hex: string): number {
   return new THREE.Color(hex).getHex();
@@ -37,6 +47,10 @@ function addRingMarker(scene: THREE.Scene, waypoint: WaypointDef): void {
   cap.position.set(x, 1.6, z);
   cap.name = `waypoint-cap:${waypoint.id}`;
   scene.add(cap);
+
+  const label = makeBillboardLabel(waypoint.label, "wp-label", 1.95);
+  label.position.set(x, 1.95, z);
+  scene.add(label);
 }
 
 function addClassroomBox(scene: THREE.Scene, waypoint: WaypointDef): void {

@@ -73,8 +73,10 @@ export function applyLocomotion(
   poseBone(vrm, rest, "leftLowerLeg", weight * leftKnee * 0.42);
   poseBone(vrm, rest, "rightLowerLeg", weight * rightKnee * 0.42);
 
-  poseBone(vrm, rest, "leftUpperArm", weight * opposite * 0.38, 0, (1 - weight) * 0.04);
-  poseBone(vrm, rest, "rightUpperArm", weight * stride * 0.38, 0, (1 - weight) * -0.04);
-  poseBone(vrm, rest, "leftLowerArm", weight * 0.12 + (1 - weight) * breathe);
-  poseBone(vrm, rest, "rightLowerArm", weight * 0.12 + (1 - weight) * breathe);
+  // Samples rest in T-pose — drop arms to an A-pose, then swing while walking.
+  const armDown = 1.15 - weight * 0.12;
+  poseBone(vrm, rest, "leftUpperArm", weight * opposite * 0.45, 0, armDown);
+  poseBone(vrm, rest, "rightUpperArm", weight * stride * 0.45, 0, -armDown);
+  poseBone(vrm, rest, "leftLowerArm", 0.18 + weight * 0.2 + (1 - weight) * breathe);
+  poseBone(vrm, rest, "rightLowerArm", 0.18 + weight * 0.2 + (1 - weight) * breathe);
 }

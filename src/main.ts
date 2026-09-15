@@ -2,6 +2,7 @@ import "./style.css";
 import { VRM } from "@pixiv/three-vrm";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import {
   type AvatarSlot,
   type AvatarSlotCatalog,
@@ -21,7 +22,7 @@ import {
   tickAgent,
 } from "./npcAgents";
 import { AcademyClock, loadSchedule, type ScheduleCatalog } from "./npcSchedule";
-import { addSchedulePlaceholders } from "./placeholders";
+import { addSchedulePlaceholders, makeBillboardLabel } from "./placeholders";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1f2a);
@@ -33,13 +34,18 @@ const camera = new THREE.PerspectiveCamera(
   0.05,
   200,
 );
-camera.position.set(16, 18, 22);
+camera.position.set(11, 11, 15);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.appendChild(renderer.domElement);
+
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(window.innerWidth, window.innerHeight);
+labelRenderer.domElement.className = "label-layer";
+document.body.appendChild(labelRenderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.screenSpacePanning = true;
@@ -209,6 +215,7 @@ async function showSlot(catalog: AvatarSlotCatalog, requestedId: string | null):
 
   currentVrm = next;
   next.scene.position.copy(PREVIEW_STAND);
+  next.scene.add(makeBillboardLabel(displayNameLabel(slot.displayName), "npc-label", 1.82));
   scene.add(next.scene);
   setStatus(`프리뷰 · ${slot.id} (일정 없음 · 슬롯 VRM 교체 가능)`, "idle");
 }
@@ -230,12 +237,14 @@ function frame(): void {
   renderClockHud();
   renderRoster();
   renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
 }
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  labelRenderer.setSize(window.innerWidth, window.innerHeight);
 });
 
 const catalog = await loadCatalog();
