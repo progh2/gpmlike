@@ -58,6 +58,7 @@ export function renderDayHud(
     item.textContent = beat;
     if (beat === session.beat) {
       item.dataset.current = "on";
+      item.setAttribute("aria-current", "step");
     }
     if (session.picked[beat]) {
       item.dataset.done = "on";
@@ -68,6 +69,7 @@ export function renderDayHud(
   hud.stats.replaceChildren();
   const voiceRow = document.createElement("div");
   voiceRow.className = "day-stat";
+  voiceRow.dataset.voice = session.voice <= 0 ? "empty" : session.voice < 3 ? "low" : "ok";
   const voiceLabel = document.createElement("span");
   voiceLabel.textContent = "발언 Voice";
   const voiceValue = document.createElement("strong");
