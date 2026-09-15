@@ -72,3 +72,32 @@ canvas {
 #slot-status[data-kind="error"] {
   color: #f0a0a0;
 }
+
+#clock-status {
+  margin: 0;
+  color: #c5d8c4;
+  font-size: 12px;
+}
+
+#npc-roster {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #9fb1c0;
+  font-size: 12px;
+}
+
+#npc-roster li[data-gait="walk"] {
+  color: #e8d9a8;
+}
+
+#npc-roster li[data-gait="idle"] {
+  color: #a8c9d8;
+}
+
+#npc-roster li[data-focus="on"] {
+  color: #f2f6fb;
+}

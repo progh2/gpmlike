@@ -3,17 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nuri Term / 누리학기 — VRM slots</title>
+    <title>Nuri Term / 누리학기 — NPC schedules</title>
   </head>
   <body>
     <div id="hud">
-      <strong>Nuri Term</strong> · VRM slot demo · ground grid
+      <strong>Nuri Term</strong> · 자율 NPC 스케줄 · 더미 학원 웨이포인트
       <label class="slot-picker">
         <span>Avatar slot</span>
         <select id="slot-select"></select>
       </label>
       <p id="slot-meta"></p>
       <p id="slot-status">카탈로그 로드 중…</p>
+      <p id="clock-status">학원 시계 대기…</p>
+      <ul id="npc-roster"></ul>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
