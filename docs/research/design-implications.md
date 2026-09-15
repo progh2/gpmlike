@@ -5,6 +5,8 @@
 **프로젝트 입장:** *시스템*에서 영감 — GPM 리메이크·팬게임이 아님.  
 No copyrighted names of characters, songs, specific medals, Action Code tables, or dialogue.
 
+Product lock (fiction / IA / VRM): [`../design/original-pitch.md`](../design/original-pitch.md) · [`../design/ia.md`](../design/ia.md) · [`../design/vrm-slots.md`](../design/vrm-slots.md). Same borrow-vs-invent text: [`../design/design-implications.md`](../design/design-implications.md).
+
 ---
 
 ## A. Borrow as *systems* (patterns) · 시스템으로 빌려올 패턴

@@ -4,10 +4,10 @@ GPM-*inspired* **original** browser game: a coastal defense academy, living NPCs
 
 건퍼레이드마치에서 **시스템·톤만** 참고한 오리지널 웹게임입니다. 복제·리메이크가 아닙니다.
 
-**Not affiliated with Sony Interactive Entertainment, Alfa System, J.C.Staff, or Gunparade March.**  
-소니 / GPM 권리자와 무관합니다. 원작 대사·캐릭터·에셋·ROM을 넣지 않습니다.
+**Not affiliated with Sony Interactive Entertainment, softhouse-Chara, Alfa System, J.C.Staff, or Gunparade March.**  
+소니 / 소프thouse / GPM 권리자와 무관합니다. 원작 대사·캐릭터·에셋·ROM을 넣지 않습니다.
 
-Legal checklist: [docs/LEGAL.md](docs/LEGAL.md)
+Legal checklist: [docs/LEGAL.md](docs/LEGAL.md) · design lock: [pitch](docs/design/original-pitch.md) · [IA](docs/design/ia.md) · [VRM slots](docs/design/vrm-slots.md)
 
 ## Pitch
 
@@ -39,16 +39,19 @@ npm run preview
 
 | Path | What |
 | --- | --- |
-| [docs/LEGAL.md](docs/LEGAL.md) | Copyright boundary checklist |
+| [docs/LEGAL.md](docs/LEGAL.md) | Copyright boundary + PR checklist (#3) |
 | [docs/research/SOURCES.md](docs/research/SOURCES.md) | Public URLs + access dates (#1) |
 | [docs/research/systems-overview.md](docs/research/systems-overview.md) | Calendar / stats / relations / combat / map |
 | [docs/research/world-tone.md](docs/research/world-tone.md) | Tone & pressure (no cast names) |
 | [docs/research/anime-vs-game.md](docs/research/anime-vs-game.md) | Game vs 2003 TV |
 | [docs/research/day-loop.md](docs/research/day-loop.md) | Reference shape + original beats (#2) |
+| [docs/research/design-implications.md](docs/research/design-implications.md) | Borrow vs invent (research copy) |
 | [docs/design/design-implications.md](docs/design/design-implications.md) | Borrow vs invent |
-| [docs/design/original-pitch.md](docs/design/original-pitch.md) | Nuri Term setting (original names) |
+| [docs/design/original-pitch.md](docs/design/original-pitch.md) | Nuri Term pitch + pillars (#3) |
 | [docs/design/stats-and-relations.md](docs/design/stats-and-relations.md) | Original parameter IDs (#2) |
-| [docs/design/vrm-slots.md](docs/design/vrm-slots.md) | Avatar JSON convention (#5) |
+| [docs/design/ia.md](docs/design/ia.md) | M2 screen map (#4) |
+| [docs/design/vrm-slots.md](docs/design/vrm-slots.md) | Avatar slot convention (#5) |
+| [docs/design/vrm-slots.schema.json](docs/design/vrm-slots.schema.json) | Slot JSON schema (#5) |
 
 ## License
 

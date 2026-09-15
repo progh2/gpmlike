@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/progh2/gpmlike/docs/design/vrm-slots.schema.json",
+  "title": "gpmlike VRM slots catalog",
+  "description": "Character id → swappable VRM URL/path. Original display names only. Default slot must be a clear-license / CC0 / self-made sample. No GPM models.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "defaultSlotId", "slots"],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "defaultSlotId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Must match a slots[].id. Runtime loads this when no override is set."
+    },
+    "slots": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/slot" }
+    }
+  },
+  "$defs": {
+    "roleId": {
+      "type": "string",
+      "enum": ["Pilot", "Scout", "Lead", "Wrench", "Ops", "Medic"]
+    },
+    "displayName": {
+      "description": "Original name only — never a GPM proper noun.",
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ko", "en"],
+          "properties": {
+            "ko": { "type": "string", "minLength": 1 },
+            "en": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "license", "licenseUrl"],
+      "anyOf": [
+        { "required": ["vrmUrl"] },
+        { "required": ["vrmPath"] }
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "description": "Stable character id from original-pitch.md"
+        },
+        "displayName": { "$ref": "#/$defs/displayName" },
+        "vrmUrl": {
+          "type": "string",
+          "description": "Absolute https URL. Runtime swaps this string; no code change."
+        },
+        "vrmPath": {
+          "type": "string",
+          "description": "Same-origin path such as /models/samples/default-cadet.vrm"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1,
+          "description": "SPDX id or short label, e.g. CC0-1.0"
+        },
+        "licenseUrl": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": { "$ref": "#/$defs/roleId" },
+        "sourceName": { "type": "string" },
+        "sourceUrl": { "type": "string" },
+        "attribution": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["placeholder", "ready"]
+        }
+      }
+    }
+  }
+}

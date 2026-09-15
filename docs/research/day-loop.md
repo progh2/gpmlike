@@ -1,7 +1,8 @@
 # day-loop.md — Day loop diagram (research → original)
 # 하루 루프 도식 (조사 → 오리지널 재작성)
 
-**#2 deliverable.** Reference shape from public GPM systems; **gpmlike names are original**.
+**#2 deliverable.** Reference shape from public GPM systems; **gpmlike names are original**.  
+M2 screens that consume these beats: [`../design/ia.md`](../design/ia.md).
 
 ---
 
