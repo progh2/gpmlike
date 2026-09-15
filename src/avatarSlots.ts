@@ -29,8 +29,48 @@ export type AvatarSlotCatalog = {
   slots: AvatarSlot[];
 };
 
+/** Locked in docs/design/original-pitch.md — swap URL/path only, never rename. */
+export const LOCKED_SLOT_IDS = [
+  "cadet_player",
+  "cadet_iseul",
+  "cadet_rio",
+  "cadet_minjae",
+  "cadet_arin",
+  "cadet_taeho",
+  "staff_nari",
+] as const;
+
+const lockedSlotIdSet = new Set<string>(LOCKED_SLOT_IDS);
+
 export function catalogHref(): string {
   return `${import.meta.env.BASE_URL}avatar-slots.json`;
+}
+
+export function assertCatalog(data: AvatarSlotCatalog): AvatarSlotCatalog {
+  if (data.schemaVersion !== 1 || !Array.isArray(data.slots) || data.slots.length === 0) {
+    throw new Error("지원하지 않는 avatar-slots.json 스키마입니다.");
+  }
+
+  const ids = data.slots.map((slot) => slot.id);
+  const missing = LOCKED_SLOT_IDS.filter((id) => !ids.includes(id));
+  const unexpected = ids.filter((id) => !lockedSlotIdSet.has(id));
+  if (missing.length > 0 || unexpected.length > 0) {
+    throw new Error("슬롯 id는 고정입니다. vrmUrl/vrmPath만 교체하세요.");
+  }
+  if (!lockedSlotIdSet.has(data.defaultSlotId)) {
+    throw new Error("defaultSlotId가 잠긴 슬롯 id가 아닙니다.");
+  }
+
+  for (const slot of data.slots) {
+    if (!slot.license?.trim() || !slot.licenseUrl?.trim()) {
+      throw new Error(`슬롯 ${slot.id}: license와 licenseUrl은 필수입니다.`);
+    }
+    if (!slot.vrmUrl?.trim() && !slot.vrmPath?.trim()) {
+      throw new Error(`슬롯 ${slot.id}: vrmUrl 또는 vrmPath가 필요합니다.`);
+    }
+  }
+
+  return data;
 }
 
 export async function loadCatalog(): Promise<AvatarSlotCatalog> {
@@ -40,11 +80,7 @@ export async function loadCatalog(): Promise<AvatarSlotCatalog> {
     throw new Error(`avatar-slots.json 로드 실패 (${response.status})`);
   }
 
-  const data = (await response.json()) as AvatarSlotCatalog;
-  if (data.schemaVersion !== 1 || !Array.isArray(data.slots) || data.slots.length === 0) {
-    throw new Error("지원하지 않는 avatar-slots.json 스키마입니다.");
-  }
-  return data;
+  return assertCatalog((await response.json()) as AvatarSlotCatalog);
 }
 
 export function slotIdFromSearch(search = window.location.search): string | null {
@@ -75,6 +111,9 @@ export function displayNameLabel(name: DisplayName): string {
 export function resolveVrmHref(slot: AvatarSlot): string {
   const url = slot.vrmUrl?.trim();
   if (url) {
+    if (!url.startsWith("https://")) {
+      throw new Error(`슬롯 ${slot.id}: vrmUrl은 https URL이어야 합니다.`);
+    }
     return url;
   }
 

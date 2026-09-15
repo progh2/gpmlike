@@ -37,14 +37,23 @@ npm run preview
 
 ### Swap a VRM (no code change)
 
-Runtime reads [`public/avatar-slots.json`](public/avatar-slots.json) (`id` → URL/path). Schema: [`docs/design/vrm-slots.md`](docs/design/vrm-slots.md).
+Runtime reads [`public/avatar-slots.json`](public/avatar-slots.json). Schema: [`docs/design/vrm-slots.md`](docs/design/vrm-slots.md) + [`vrm-slots.schema.json`](docs/design/vrm-slots.schema.json).
 
-1. Get a **license-clear** `.vrm` (official sample URL, CC0, or self-made). **No GPM IP or ripped models.**
-2. Either set that slot's `vrmUrl` to an `https://` link (CORS must allow the origin), **or** drop the file under `public/models/samples/` and set `vrmPath` (example: `/models/samples/default-cadet.vrm`).
-3. If both are set, **`vrmUrl` wins**. Keep `license` + `licenseUrl` (+ source) in sync with the file you actually load.
-4. Restart / refresh. Switch faces with the HUD dropdown, or open `?slot=cadet_iseul` (any catalog `id`).
+Review bar (#7):
 
-`*.vrm` is gitignored. Do not commit binaries unless redistribution is explicitly allowed **and** the PR lists `license` + `licenseUrl`.
+1. **Do not rename slot `id`s.** Only edit `vrmUrl` / `vrmPath`.
+2. **Every slot must keep `license` + `licenseUrl`.** Missing = FAIL (`npm run validate:slots` / `npm run build`).
+3. **Do not commit `.vrm` binaries.** Load from a documented `https://` CDN/URL.
+4. Follow the slots doc + schema.
+
+Steps:
+
+1. Get a **license-clear** `.vrm` URL (official sample, CC0, or self-made). **No GPM IP or ripped models.**
+2. Put that `https://` link on the existing slot's `vrmUrl` (CORS must allow the origin).
+3. Update that same slot's `license` + `licenseUrl` (+ source) to match the file you actually load.
+4. Refresh. Switch faces with the HUD dropdown, or open `?slot=cadet_iseul` (any locked catalog `id`).
+
+`*.vrm` is gitignored. Local `vrmPath` is for private experiments only — never commit the binary.
 
 ### Sample models in this demo
 

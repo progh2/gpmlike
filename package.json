@@ -6,7 +6,8 @@
   "description": "Nuri Term — original GPM-inspired academy + mecha-lite web game",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "validate:slots": "node scripts/validate-avatar-slots.mjs",
+    "build": "node scripts/validate-avatar-slots.mjs && tsc --noEmit && vite build",
     "preview": "vite preview"
   },
   "engines": {
