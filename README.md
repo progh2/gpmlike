@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking IA hub routes (`Talk` `Drill` `Desk` `Bay` `Shop`), idle/walk, the slot dropdown, and the **DayHUD** overlay (date / beat / stats / Trust).
+Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking IA hub routes (`Talk` `Drill` `Desk` `Bay` `Shop`), idle/walk, the slot dropdown, and the **DayHUD** overlay (beat strip, `Voice`, `Trust`).
 
 ```bash
 npm run build
@@ -37,17 +37,17 @@ npm run preview
 
 ### How to play the day sim MVP (#9)
 
-Original copy only. Stat / relation IDs match [`docs/design/stats-and-relations.md`](docs/design/stats-and-relations.md). Day beats match [`docs/research/day-loop.md`](docs/research/day-loop.md): `MORNING` → `BRIEF` → `BLOCK_A` → `MEAL` → `BLOCK_B` → `FREE` → `EOD`.
+Team lock: **one lap** `MORNING` → `BRIEF` → `BLOCK_A` → `MEAL` → `BLOCK_B` → `FREE` → `EOD`. Copy is original Korean/English only — no GPM proper names, no Japanese stat names (`体力` / `気力` / …). The only numbers that move are **`Voice` / 발언** and **`Trust` / 신뢰**.
 
-1. Open the demo. **DayHUD** (right) shows term day, beat strip, vitals (`Body` `Drive` `Focus` `Mind` `Presence` `Morale`), `Voice`, and bidirectional `Trust` for the three walking cadets.
-2. **MORNING** — pick one of two choices (greet 한이슬, or check gear alone). Stats / `Trust` change immediately. The beat will not advance until you pick.
-3. Click **다음 비트**. `BRIEF` pays a `Voice` stipend. `BLOCK_A` / `MEAL` / `BLOCK_B` are flavor beats (no extra choice).
-4. **FREE** — pick one hub verb: `Talk` (리오, spends `Voice`) or `Drill` (해벽 보행). Again, stats / `Trust` update.
-5. Advance through **EOD**, then **다음 날로**. EOD applies daily decay (`Focus` `Mind` `Presence`) and increments the term day.
-6. **Refresh the tab.** Date, beat, stats, and relations restore from `localStorage` (`nuri-term.day-sim.v1`). NPCs snap to the saved beat’s route, then walk.
-7. **새 학기** wipes the stored session.
+1. Open the demo. **DayHUD** (right) shows the beat strip, `Voice`, and bidirectional `Trust` for the three walking cadets.
+2. **MORNING** — one of two choices: greet 한이슬 (`Talk`, `Trust` up) or write the watch note alone (`Desk`, `Voice` up). The beat will not advance until you pick.
+3. Click **다음 비트** through `BRIEF` `BLOCK_A` `MEAL` `BLOCK_B` (flavor only).
+4. **FREE** — one of two hub verbs: `Talk` with 리오 (`Voice` down, `Trust` up) or `Shop` (hold `Voice`).
+5. Advance into **EOD**. That is the end of the lap (no next day). The session writes to `localStorage` (`nuri-term.day-sim.v2`) **only at EOD**.
+6. **Refresh the tab.** If you reached EOD, beat / `Voice` / `Trust` restore. Mid-lap refresh starts the lap over (no checkpoint yet).
+7. **새 학기** clears the EOD save.
 
-The existing Three scene stays: NPC walk, VRM slot dropdown (`?slot=`), and Hub nodes are unchanged. The academy clock is **player-driven** (paused auto-loop) so a beat change sends NPCs to that beat’s stops.
+NPC walk, VRM slot dropdown (`?slot=`), and Hub nodes `Talk` `Drill` `Desk` `Bay` `Shop` stay as they are. The academy clock is player-driven: each beat change sends NPCs to that beat’s hub stop.
 
 ### Swap a VRM (no code change)
 
