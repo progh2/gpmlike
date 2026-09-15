@@ -31,14 +31,17 @@
 | 항목 | 값 |
 | --- | --- |
 | Slot | `cadet_player` (`defaultSlotId`) |
-| File intent | `/models/samples/default-cadet.vrm` |
-| License | **CC0-1.0** |
-| Source | VRoid Studio β AvatarSample_1 (pixiv) |
-| License note | [VRoid FAQ — sample model terms](https://vroid.pixiv.help/hc/en-us/articles/4402614652569-Do-VRoid-Studio-s-sample-models-come-with-conditions-of-use) |
+| File intent | `/models/samples/default-cadet.vrm` (local `vrmPath`, optional) |
+| M2 demo URL | Official VRM Consortium sample via jsDelivr (`vrmUrl` wins) |
+| License (current URL) | **VRM Public License 1.0** — [vrm.dev/licenses/1.0](https://vrm.dev/licenses/1.0/) |
+| Source | [VRM1_Constraint_Twist_Sample](https://github.com/vrm-c/vrm-specification/tree/master/samples/VRM1_Constraint_Twist_Sample) (pixiv Inc.) |
+| Alternate demo URL | [Seed-san](https://github.com/vrm-c/vrm-specification/tree/master/samples/Seed-san) (VirtualCast, Inc.; same license) |
 
-Vendoring 전 `status: "placeholder"` 허용. **라이선스 필드는 채워 둔다.** GPM 룩어라이크·라이선스 불명 Hub 모델을 넣지 말 것.
+Vendoring 전 `status: "placeholder"` 허용. **라이선스 필드는 실제 로드하는 파일과 맞출 것.** GPM 룩어라이크·라이선스 불명 Hub 모델을 넣지 말 것.
 
-허용 출처: 공식 VRoid β 샘플(CC0), CC0 VRM, 자체 제작. A–C 등 **별도 약관** 샘플은 약관을 읽고 `license`를 맞게 적을 것.
+허용 출처: 공식 VRM Consortium / three-vrm 샘플(약관 명시), 공식 VRoid β 샘플(CC0), CC0 VRM, 자체 제작. A–C 등 **별도 약관** 샘플은 약관을 읽고 `license`를 맞게 적을 것.
+
+로컬에 CC0 파일을 두면 `vrmUrl`을 지우고 `vrmPath`만 남기면 된다.
 
 ---
 

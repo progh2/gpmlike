@@ -16,11 +16,59 @@ canvas {
   top: 12px;
   left: 12px;
   z-index: 1;
-  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: min(420px, calc(100vw - 24px));
+  padding: 10px 12px;
   border-radius: 6px;
-  background: rgba(12, 16, 22, 0.72);
+  background: rgba(12, 16, 22, 0.78);
   color: #d7e4ee;
   font-size: 13px;
   letter-spacing: 0.02em;
   pointer-events: none;
+}
+
+#hud a {
+  color: #8fd4e4;
+}
+
+.slot-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+.slot-picker span {
+  color: #9fb1c0;
+  font-size: 11px;
+}
+
+#slot-select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #3a4d5c;
+  border-radius: 4px;
+  background: #121820;
+  color: #e8f0f6;
+  font: inherit;
+}
+
+#slot-meta,
+#slot-status {
+  margin: 0;
+  line-height: 1.4;
+}
+
+#slot-meta {
+  color: #b7c6d3;
+}
+
+#slot-status[data-kind="busy"] {
+  color: #f0d58a;
+}
+
+#slot-status[data-kind="error"] {
+  color: #f0a0a0;
 }

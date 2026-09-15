@@ -3,11 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nuri Term / 누리학기 — scaffold</title>
+    <title>Nuri Term / 누리학기 — VRM slots</title>
   </head>
   <body>
     <div id="hud">
-      <strong>Nuri Term</strong> · empty Three.js scaffold · ground grid
+      <strong>Nuri Term</strong> · VRM slot demo · ground grid
+      <label class="slot-picker">
+        <span>Avatar slot</span>
+        <select id="slot-select"></select>
+      </label>
+      <p id="slot-meta"></p>
+      <p id="slot-status">카탈로그 로드 중…</p>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
