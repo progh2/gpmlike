@@ -1,8 +1,7 @@
 # SOURCES.md — Gunparade March research (public, systems-focused)
 
 **Research purpose:** Inform design of an *original* web game inspired by systems, not to reproduce GPM IP (dialogue, plots, art, ROMs).  
-**Accessed:** 2026-09-15 (UTC) / 2026-09-16 KST.
-**Re-verified:** 2026-09-16 KST (JP Wikipedia game+anime pages, Kimimi review live fetch).  
+**Accessed:** 2026-09-15 (UTC) / 2026-09-16 KST.  
 **Method:** WebSearch + WebFetch of public pages. No ROM dumps, no dialogue scripts, no full plot transcripts.
 
 ---
@@ -40,14 +39,6 @@
 
 ---
 
-## Avatar / tooling (for #5, not GPM)
-
-| URL | Accessed note | One-line |
-| --- | --- | --- |
-| https://vroid.pixiv.help/hc/en-us/articles/4402614652569-Do-VRoid-Studio-s-sample-models-come-with-conditions-of-use | Fetched 2026-09-15 UTC | Official: β AvatarSample_1–4 are CC0; A–C have separate terms. |
-
----
-
 ## Hard exclusions (not collected)
 
 - Character dialogue scripts / full conversation trees  
@@ -61,3 +52,9 @@
 - Exact real-time conversion (≈4 real sec ≈ 1 in-game minute) comes from EN review, not JP Wikipedia — treat as approximate.  
 - Some fan-wiki battle/event numbers may be community-tested; prefer Wikipedia + reviews for design borrowing.  
 - Developer interview details are second-hand via Ogre Run; re-fetch primary interview before marketing claims.
+
+---
+
+## Related in this repo (not GPM research)
+
+VRM sample licensing for swappable avatars: [`docs/design/vrm-slots.md`](../design/vrm-slots.md).
