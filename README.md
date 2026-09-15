@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173`). You should see an empty Three.js scene and a **ground grid**.
+Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **ground grid**, one **sample VRM**, a slot dropdown, and empty waypoint / box stubs for later NPC schedules.
 
 ```bash
 npm run build
@@ -34,6 +34,37 @@ npm run preview
 ```
 
 `npm run build` type-checks with `tsc` and writes static files to `dist/` (GitHub Pages can publish that folder later).
+
+### Swap a VRM (no code change)
+
+Runtime reads [`public/avatar-slots.json`](public/avatar-slots.json). Schema: [`docs/design/vrm-slots.md`](docs/design/vrm-slots.md) + [`vrm-slots.schema.json`](docs/design/vrm-slots.schema.json).
+
+Review bar (#7):
+
+1. **Do not rename slot `id`s.** Only edit `vrmUrl` / `vrmPath`.
+2. **Every slot must keep `license` + `licenseUrl`.** Missing = FAIL (`npm run validate:slots` / `npm run build`).
+3. **Do not commit `.vrm` binaries.** Load from a documented `https://` CDN/URL.
+4. Follow the slots doc + schema.
+
+Steps:
+
+1. Get a **license-clear** `.vrm` URL (official sample, CC0, or self-made). **No GPM IP or ripped models.**
+2. Put that `https://` link on the existing slot's `vrmUrl` (CORS must allow the origin).
+3. Update that same slot's `license` + `licenseUrl` (+ source) to match the file you actually load.
+4. Refresh. Switch faces with the HUD dropdown, or open `?slot=cadet_iseul` (any locked catalog `id`).
+
+`*.vrm` is gitignored. Local `vrmPath` is for private experiments only — never commit the binary.
+
+### Sample models in this demo
+
+The default catalog hot-links official **VRM Consortium** samples via jsDelivr (same files `@pixiv/three-vrm` uses). We do **not** vendor the binaries.
+
+| Sample | License | Source |
+| --- | --- | --- |
+| [VRM1_Constraint_Twist_Sample](https://github.com/vrm-c/vrm-specification/tree/master/samples/VRM1_Constraint_Twist_Sample) | [VRM Public License 1.0](https://vrm.dev/licenses/1.0/) | pixiv Inc. (c) 2022 |
+| [Seed-san](https://github.com/vrm-c/vrm-specification/tree/master/samples/Seed-san) | [VRM Public License 1.0](https://vrm.dev/licenses/1.0/) | VirtualCast, Inc. |
+
+These are implementation samples, not our cast. Slot `displayName` values stay original (서하늘 / …). A later local CC0 / self-made file can replace `vrmUrl` without changing `id`.
 
 ## Docs
 
@@ -55,4 +86,4 @@ npm run preview
 
 ## License
 
-**Our code** is [MIT](LICENSE). Research notes are ours; they do not grant rights to any third-party game or anime. VRM samples stay under **their** licenses (default: CC0 VRoid β samples — see the slots doc).
+**Our code** is [MIT](LICENSE). Research notes are ours; they do not grant rights to any third-party game or anime. VRM samples stay under **their** licenses (demo default: VRM Public License 1.0 Consortium samples — see the table above and [vrm-slots.md](docs/design/vrm-slots.md)).

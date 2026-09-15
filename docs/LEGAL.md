@@ -22,7 +22,7 @@ This repo is an **original** web game inspired only by publicly described *syste
 
 제품(UI, 런타임, 배포 빌드)에 넣을 수 있는 것:
 
-- [ ] **라이선스가 명확한 VRM** — 슬롯 메타에 `license` + `licenseUrl` 필수. 기본 샘플은 공개 라이선스(예: VRoid Studio β AvatarSample **CC0**). → [`docs/design/vrm-slots.md`](design/vrm-slots.md)
+- [ ] **라이선스가 명확한 VRM** — 슬롯 메타에 `license` + `licenseUrl` 필수. 공개 라이선스 예: VRoid Studio β AvatarSample **CC0**, 또는 VRM Consortium / `@pixiv/three-vrm` 공식 샘플의 **VRM Public License 1.0**(핫링크, 바이너리 미커밋). → [`docs/design/vrm-slots.md`](design/vrm-slots.md)
 - [ ] **CC0** 또는 재배포·사용 조건이 문서로 확인된 서드파티 에셋 (요청된 크레딧 유지)
 - [ ] **자체 제작** 텍스트·아트·오디오·모델
 - [ ] 우리 TypeScript / Vite / Three.js 코드 (MIT — [`LICENSE`](../LICENSE))
