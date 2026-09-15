@@ -9,6 +9,12 @@ GPM-*inspired* **original** browser game: a coastal defense academy, living NPCs
 
 Legal checklist: [docs/LEGAL.md](docs/LEGAL.md) · design lock: [pitch](docs/design/original-pitch.md) · [IA](docs/design/ia.md) · [VRM slots](docs/design/vrm-slots.md)
 
+## Play
+
+**Live:** [https://progh2.github.io/gpmlike/](https://progh2.github.io/gpmlike/)
+
+GitHub Actions builds `dist/` on every push to `main` and publishes the `gh-pages` branch ([`.github/workflows/pages.yml`](.github/workflows/pages.yml)). First-time repo setup: **Settings → Pages → Build and deployment → Deploy from a branch → `gh-pages` / root**.
+
 ## Pitch
 
 **KO (짧게):** 누리만 방위학원에서 하루를 보내는 시뮬. NPC는 제 일정으로 움직이고, 전투는 작은 쇼어프레임 당직이다. 얼굴은 라이선스 명확한 VRM으로 갈아끼운다.
@@ -17,7 +23,7 @@ Legal checklist: [docs/LEGAL.md](docs/LEGAL.md) · design lock: [pitch](docs/des
 
 Setting and original names: [docs/design/original-pitch.md](docs/design/original-pitch.md)
 
-## How to run
+## How to run locally
 
 Requires Node.js 20+ (this repo was bootstrapped on 22).
 
@@ -33,7 +39,7 @@ npm run build
 npm run preview
 ```
 
-`npm run build` type-checks with `tsc`, runs slot validation, and writes static files to `dist/` (GitHub Pages can publish that folder later).
+`npm run build` type-checks with `tsc`, validates avatar slots, and writes static files to `dist/`. Production `base` is `/gpmlike/` so the same `dist/` works on project Pages (`https://progh2.github.io/gpmlike/`). Preview is then `http://localhost:4173/gpmlike/`. Override with `VITE_BASE=/` for a user/org site.
 
 ### How to play the day sim MVP (#9)
 
@@ -127,6 +133,7 @@ These are implementation samples, not our cast. Slot `displayName` values stay o
 | [public/npc-schedules.json](public/npc-schedules.json) | NPC routes + day-beat clock (#8) |
 | `src/daySim.ts` | Day sim session + localStorage (#9) |
 | `src/sortieLite.ts` | SortieLite one-battle prototype (#10) |
+| [`.github/workflows/pages.yml`](.github/workflows/pages.yml) | Build `dist/` → `gh-pages` (#11) |
 
 ## License
 
