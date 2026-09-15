@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking IA hub routes (`Talk` `Drill` `Desk` `Bay` `Shop`), idle/walk, the slot dropdown, the **DayHUD** overlay (beat strip, `Voice`, `Trust`), and a **당직 / Sortie** button for the combat-lite prototype.
+Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking IA hub routes (`Talk` `Drill` `Desk` `Bay` `Shop`), idle/walk, the slot dropdown, the **DayHUD** overlay (beat strip, `Voice`, `Trust`), and a **CRISIS / SortieLite** button.
 
 ```bash
 npm run build
@@ -51,16 +51,18 @@ NPC walk, VRM slot dropdown (`?slot=`), and Hub nodes `Talk` `Drill` `Desk` `Bay
 
 ### How to start the fight (#10)
 
-One complete **position-based** watch on a 5-cell lane. Original names only — no GPM mechs, IP, or Action Codes.
+Team lock. One position-based watch. No GPM mechs or Action Codes.
 
-Locked kinds: **Shoreframe** · **WallScout** · **Seamkin** ([`docs/design/original-pitch.md`](docs/design/original-pitch.md) §8). Units: **브라인니 / Brineknee** (Shoreframe, player) · **켈프워크 / Kelpwalk** (WallScout, Auto ally) · **패덤틱 / Fathomtick** (Seamkin) on **솔트래치 절개 / Saltlatch Cut**.
+**Entry:** `CRISIS` overlay → `SortieLite` (**Auto** default). **Return** restores the previous day beat. **Bay** is gear/loadout only — it does not start the fight.
 
-1. Open the demo. On **DayHUD** (right), click **당직 / Sortie**. Or click the **Bay** hub marker on the campus grid (id stays `Bay` — gear/loadout stays at Bay; no in-fight swap). Shortcut: `?sortie=1`.
-2. `CRISIS` opens `SortieLite` as an overlay. The current day beat is remembered and restored on return. `Voice`, `Trust`, and the EOD checkpoint (`nuri-term.day-sim.v2`) are **not** written by the fight.
-3. You act, then Kelpwalk acts (Auto), then the Seamkin acts. **Auto 한 턴** (default): strike if adjacent, otherwise step toward the enemy.
+**Unit IDs** ([`docs/design/original-pitch.md`](docs/design/original-pitch.md) §8): allies `Shoreframe` (player) + `WallScout` (Auto); one enemy dummy `Seamkin`.
+
+1. Open the demo. On **DayHUD** (right), click **CRISIS / SortieLite**. Shortcut: `?crisis=1` (or `?sortie=1`).
+2. Overlay opens. The current beat is stored and restored on return. `Voice`, `Trust`, and `nuri-term.day-sim.v2` are **not** written by the fight.
+3. You act, then `WallScout` (Auto), then the `Seamkin` dummy. **Auto 한 턴**: strike if adjacent, else step closer.
 4. Manual verbs (not Action Codes): **전진 Advance** / **후퇴 Withdraw** / **타격 Strike** / **대기 Hold**.
-5. Drop the Fathomtick to 0 HP to win, or lose if Brineknee hits 0. Then **학원으로 / Return** — overlay closes, previous beat resumes.
-6. Hub nodes, VRM slots, NPC schedules, and the day-sim Trust/Voice save stay as they were.
+5. Drop `Seamkin` to 0 to win, or lose if `Shoreframe` hits 0. **학원으로 / Return** resumes the previous beat.
+6. Click Hub **Bay** to check loadout (no in-fight swap). Hub ids stay `Talk` `Drill` `Desk` `Bay` `Shop`. VRM slots and the Trust/Voice save stay as they were.
 
 ### Swap a VRM (no code change)
 

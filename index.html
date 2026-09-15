@@ -7,7 +7,7 @@
   </head>
   <body>
     <div id="hud">
-      <strong>Nuri Term</strong> · 일과 MVP · Hub Talk/Drill/Desk/Bay/Shop · Bay = 당직
+      <strong>Nuri Term</strong> · 일과 MVP · Hub Talk/Drill/Desk/Bay/Shop · Bay = 정비 · CRISIS = SortieLite
       <label class="slot-picker">
         <span>Avatar slot</span>
         <select id="slot-select"></select>
@@ -37,15 +37,25 @@
         <button type="button" id="day-advance">다음 비트</button>
         <button type="button" id="day-reset">새 학기</button>
       </div>
-      <button type="button" id="day-sortie">당직 / Sortie</button>
+      <button type="button" id="day-sortie">CRISIS / SortieLite</button>
     </aside>
+    <div id="bay-overlay" hidden>
+      <aside id="bay-hud" aria-label="정비 베이">
+        <header class="sortie-head">
+          <strong>Bay</strong>
+          <span>로드아웃만 / loadout only</span>
+        </header>
+        <p id="bay-note">씰·팔 확인. 전투 중 교체 없음. 당직은 CRISIS → SortieLite. / Check seals and arms. No in-fight swap. Fight starts from CRISIS → SortieLite.</p>
+        <button type="button" id="bay-close">닫기 / Close</button>
+      </aside>
+    </div>
     <div id="sortie-overlay" hidden>
-      <aside id="sortie-hud" aria-label="당직 전투">
+      <aside id="sortie-hud" aria-label="SortieLite">
         <header class="sortie-head">
           <strong>SortieLite</strong>
-          <span>CRISIS · 오리지널 유닛만</span>
+          <span>CRISIS · Auto · Shoreframe / WallScout / Seamkin</span>
         </header>
-        <p id="sortie-map">3번 당직 · 솔트래치 절개</p>
+        <p id="sortie-map">CRISIS · SortieLite</p>
         <ol id="sortie-lane"></ol>
         <div id="sortie-units"></div>
         <p id="sortie-log"></p>
