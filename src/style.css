@@ -312,8 +312,9 @@ body[data-sortie="on"] #day-hud {
   background: rgba(8, 12, 16, 0.62);
 }
 
-#sortie-overlay[hidden] {
-  display: none;
+#sortie-overlay[hidden],
+.sortie-footer button[hidden] {
+  display: none !important;
 }
 
 #sortie-hud {
