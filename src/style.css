@@ -123,3 +123,171 @@ canvas {
 .npc-label {
   color: #f4e7b8;
 }
+
+#day-hud {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(340px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: rgba(12, 16, 22, 0.82);
+  color: #d7e4ee;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  pointer-events: auto;
+}
+
+.day-hud-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.day-hud-head strong {
+  font-size: 13px;
+}
+
+#day-date {
+  color: #c5d8c4;
+}
+
+#day-beats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#day-beats li {
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #1a2430;
+  color: #8ea0af;
+}
+
+#day-beats li[data-current="on"] {
+  background: #2a4a3c;
+  color: #e8f0f6;
+}
+
+#day-beats li[data-done="on"] {
+  color: #c5d8c4;
+}
+
+.day-panel h2 {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9fb1c0;
+}
+
+#day-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 10px;
+}
+
+.day-stat {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #b7c6d3;
+}
+
+.day-stat strong {
+  color: #e8f0f6;
+}
+
+#day-relations {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #b7c6d3;
+}
+
+#day-note {
+  margin: 0;
+  color: #e8d9a8;
+  line-height: 1.4;
+}
+
+#day-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.day-choices-idle {
+  margin: 0;
+  color: #9fb1c0;
+}
+
+.day-choice,
+.day-actions button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid #3a4d5c;
+  border-radius: 4px;
+  background: #121820;
+  color: #e8f0f6;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.day-choice:hover,
+.day-actions button:hover:not(:disabled) {
+  border-color: #6ec8d4;
+}
+
+.day-choice:disabled,
+.day-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.day-choice span {
+  color: #9fb1c0;
+}
+
+.day-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+}
+
+.day-actions button {
+  align-items: center;
+}
+
+#day-reset {
+  width: auto;
+  color: #c5b8b8;
+}
+
+@media (max-width: 820px) {
+  #day-hud {
+    top: auto;
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: 42vh;
+  }
+}

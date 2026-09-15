@@ -193,8 +193,22 @@ export class AcademyClock {
     this.realSecondsPerBeat = clock.realSecondsPerBeat;
   }
 
+  /** When true, `tick` holds the current beat so the player day owns progression. */
+  paused = false;
+
   tick(delta: number): void {
+    if (this.paused) {
+      return;
+    }
     this.elapsed += delta;
+  }
+
+  seekBeat(beat: DayBeat): void {
+    const index = this.beats.indexOf(beat);
+    if (index < 0) {
+      throw new Error(`학원 시계에 없는 beat: ${beat}`);
+    }
+    this.elapsed = index * this.realSecondsPerBeat;
   }
 
   get cycleLength(): number {

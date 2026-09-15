@@ -12,6 +12,7 @@ import { loadVrm } from "./loadVrm";
 import {
   type AcademyClock,
   type AgentSchedule,
+  type DayBeat,
   type ScheduleCatalog,
   destinationFor,
   findWaypoint,
@@ -73,6 +74,14 @@ export function findAgent(agents: NpcAgent[], slotId: string): NpcAgent | undefi
 
 export function agentLabel(agent: NpcAgent): string {
   return displayNameLabel(agent.slot.displayName);
+}
+
+export function placeAgentAtBeat(agent: NpcAgent, schedule: ScheduleCatalog, beat: DayBeat): void {
+  const targetId = destinationFor(agent.plan, beat);
+  agent.vrm.scene.position.copy(waypointVector(schedule, targetId));
+  agent.targetId = targetId;
+  agent.gait = "idle";
+  agent.walkWeight = 0;
 }
 
 export function tickAgent(
