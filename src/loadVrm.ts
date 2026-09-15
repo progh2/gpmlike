@@ -49,12 +49,12 @@ export function frameVrm(
     headPos.y = box.min.y + size.y * 0.72;
   }
 
-  const lookY = THREE.MathUtils.lerp(center.y, headPos.y, 0.45);
+  const lookY = THREE.MathUtils.lerp(center.y, headPos.y, 0.28);
   target.set(center.x, lookY, center.z);
 
   const height = Math.max(size.y, 1.5);
-  const distance = height * 2.15;
-  camera.position.set(center.x + height * 0.18, lookY + height * 0.12, center.z + distance);
+  const distance = height * 2.85;
+  camera.position.set(center.x + height * 0.55, lookY + height * 0.62, center.z + distance);
   camera.near = 0.05;
   camera.far = 200;
   camera.updateProjectionMatrix();

@@ -17,10 +17,10 @@ import { addSchedulePlaceholders } from "./placeholders";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1f2a);
-scene.fog = new THREE.Fog(0x1a1f2a, 36, 80);
+scene.fog = new THREE.Fog(0x1a1f2a, 48, 90);
 
 const camera = new THREE.PerspectiveCamera(
-  32,
+  42,
   window.innerWidth / window.innerHeight,
   0.05,
   200,
@@ -41,13 +41,13 @@ controls.maxDistance = 18;
 controls.maxPolarAngle = Math.PI * 0.49;
 controls.update();
 
-const grid = new THREE.GridHelper(40, 40, 0x5aa4b8, 0x2c3d4c);
+const grid = new THREE.GridHelper(40, 40, 0x7ec8d8, 0x3d5566);
 scene.add(grid);
 
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(40, 40),
   new THREE.MeshStandardMaterial({
-    color: 0x243040,
+    color: 0x1a2633,
     roughness: 0.95,
     metalness: 0.05,
   }),
