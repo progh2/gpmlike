@@ -20,7 +20,7 @@ import {
   advanceBeat,
   applyChoice,
   loadSession,
-  persistSession,
+  persistEod,
   resetSession,
 } from "./daySim";
 import {
@@ -162,7 +162,7 @@ function populateSelect(catalog: AvatarSlotCatalog, selectedId: string): void {
 }
 
 function renderClockHud(): void {
-  clockStatus.textContent = `학원 시계 · 학기 ${session.termDay}일 · ${academyClock.beat} · 플레이어 진행`;
+  clockStatus.textContent = `학원 시계 · ${academyClock.beat} · 플레이어 진행 · Voice ${session.voice}`;
 }
 
 function syncClockToSession(): void {
@@ -170,8 +170,7 @@ function syncClockToSession(): void {
   academyClock.seekBeat(session.beat);
 }
 
-function commitSession(): void {
-  persistSession(session);
+function refreshDay(): void {
   syncClockToSession();
   paintDayHud();
 }
@@ -184,10 +183,8 @@ function chooseDayOption(choiceId: string): void {
   const result = applyChoice(session, choiceId);
   if (!result.ok) {
     session.log = result.reason;
-    paintDayHud();
-    return;
   }
-  commitSession();
+  paintDayHud();
 }
 
 function stepDay(): void {
@@ -197,7 +194,10 @@ function stepDay(): void {
     paintDayHud();
     return;
   }
-  commitSession();
+  if (result.saved) {
+    persistEod(session);
+  }
+  refreshDay();
 }
 
 function restartTerm(): void {
@@ -205,7 +205,7 @@ function restartTerm(): void {
   for (const agent of agents) {
     placeAgentAtBeat(agent, schedule, session.beat);
   }
-  commitSession();
+  refreshDay();
 }
 
 function renderRoster(): void {
@@ -322,8 +322,7 @@ try {
   setStatus(`NPC 로드 실패: ${message}`, "error");
 }
 
-paintDayHud();
-persistSession(session);
+refreshDay();
 
 await showSlot(catalog, slotIdFromSearch());
 renderer.setAnimationLoop(frame);

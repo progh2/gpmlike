@@ -2,13 +2,12 @@ import type { AvatarSlotCatalog } from "./avatarSlots";
 import { DAY_BEATS } from "./npcSchedule";
 import {
   BEAT_BLURB_KO,
-  STAT_IDS,
-  STAT_LABEL_KO,
   RELATION_NPC_IDS,
   type DayChoice,
   type DaySession,
   canAdvance,
   choicesFor,
+  isLapComplete,
   pickedChoice,
   relationLabel,
 } from "./daySim";
@@ -50,7 +49,8 @@ export function renderDayHud(
   catalog: AvatarSlotCatalog,
   onChoose: (choiceId: string) => void,
 ): void {
-  hud.date.textContent = `학기 ${session.termDay}일 · ${session.beat}`;
+  const done = isLapComplete(session);
+  hud.date.textContent = done ? `일과 끝 · ${session.beat}` : `일과 · ${session.beat}`;
 
   hud.beats.replaceChildren();
   for (const beat of DAY_BEATS) {
@@ -66,16 +66,14 @@ export function renderDayHud(
   }
 
   hud.stats.replaceChildren();
-  for (const id of STAT_IDS) {
-    const row = document.createElement("div");
-    row.className = "day-stat";
-    const label = document.createElement("span");
-    label.textContent = `${STAT_LABEL_KO[id]} ${id}`;
-    const value = document.createElement("strong");
-    value.textContent = String(session.stats[id]);
-    row.append(label, value);
-    hud.stats.append(row);
-  }
+  const voiceRow = document.createElement("div");
+  voiceRow.className = "day-stat";
+  const voiceLabel = document.createElement("span");
+  voiceLabel.textContent = "발언 Voice";
+  const voiceValue = document.createElement("strong");
+  voiceValue.textContent = String(session.voice);
+  voiceRow.append(voiceLabel, voiceValue);
+  hud.stats.append(voiceRow);
 
   hud.relations.replaceChildren();
   for (const npcId of RELATION_NPC_IDS) {
@@ -90,16 +88,21 @@ export function renderDayHud(
   hud.note.textContent = session.log || BEAT_BLURB_KO[session.beat];
 
   hud.choices.replaceChildren();
-  if (pending.length === 0) {
+  if (done) {
+    const idle = document.createElement("p");
+    idle.className = "day-choices-idle";
+    idle.textContent = "한 바퀴 저장됨. 새로고침해도 Voice / Trust가 남는다.";
+    hud.choices.append(idle);
+  } else if (pending.length === 0) {
     const idle = document.createElement("p");
     idle.className = "day-choices-idle";
     idle.textContent = BEAT_BLURB_KO[session.beat];
     hud.choices.append(idle);
   } else if (chosen) {
-    const done = document.createElement("p");
-    done.className = "day-choices-idle";
-    done.textContent = `선택함 · ${chosen.labelKo}`;
-    hud.choices.append(done);
+    const doneChoice = document.createElement("p");
+    doneChoice.className = "day-choices-idle";
+    doneChoice.textContent = `선택함 · ${chosen.labelKo} / ${chosen.labelEn}`;
+    hud.choices.append(doneChoice);
   } else {
     for (const choice of pending) {
       hud.choices.append(renderChoiceButton(choice, session, onChoose));
@@ -108,11 +111,11 @@ export function renderDayHud(
 
   const ready = canAdvance(session);
   hud.advance.disabled = !ready;
-  hud.advance.textContent = session.beat === "EOD" ? "다음 날로" : "다음 비트";
-  if (!ready) {
+  hud.advance.textContent = done ? "일과 끝" : "다음 비트";
+  if (done) {
+    hud.advance.title = "MORNING→EOD 한 바퀴만 진행합니다.";
+  } else if (!ready) {
     hud.advance.title = "이 비트에서 먼저 선택하세요.";
-  } else if (session.beat === "EOD") {
-    hud.advance.title = "EOD를 정리하고 학기 날짜를 넘깁니다.";
   } else {
     hud.advance.title = "다음 일과 비트로 진행합니다.";
   }
@@ -126,13 +129,15 @@ function renderChoiceButton(
   const button = document.createElement("button");
   button.type = "button";
   button.className = "day-choice";
-  const blocked = choice.voiceCost !== undefined && session.stats.Voice < choice.voiceCost;
+  const blocked = choice.voiceCost !== undefined && session.voice < choice.voiceCost;
   button.disabled = blocked;
 
   const title = document.createElement("strong");
   title.textContent = choice.hub ? `${choice.hub} · ${choice.labelKo}` : choice.labelKo;
   const detail = document.createElement("span");
-  detail.textContent = blocked ? `Voice ${choice.voiceCost} 필요` : choice.detailKo;
+  detail.textContent = blocked
+    ? `Voice ${choice.voiceCost} 필요 / Need Voice ${choice.voiceCost}`
+    : `${choice.detailKo} / ${choice.detailEn}`;
   button.append(title, detail);
   button.addEventListener("click", () => {
     onChoose(choice.id);

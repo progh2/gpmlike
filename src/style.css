@@ -192,7 +192,7 @@ canvas {
 
 #day-stats {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 3px 10px;
 }
 
