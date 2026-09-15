@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#1a1f2a" />
+    <title>Nuri Term / 누리학기 — day sim + SortieLite</title>
+    <script type="module" crossorigin src="/gpmlike/assets/index-CPhzgf96.js"></script>
+    <link rel="stylesheet" crossorigin href="/gpmlike/assets/index-CykcmR_J.css">
+  </head>
+  <body>
+    <div id="hud">
+      <header class="hud-head">
+        <strong>Nuri Term</strong>
+        <span>일과 MVP · Hub Talk/Drill/Desk/Bay/Shop · Bay = 정비 · CRISIS = SortieLite</span>
+      </header>
+      <label class="slot-picker">
+        <span>Avatar slot</span>
+        <select id="slot-select"></select>
+      </label>
+      <p id="slot-meta"></p>
+      <p id="slot-status">카탈로그 로드 중…</p>
+      <p id="clock-status">학원 시계 대기…</p>
+      <ul id="npc-roster"></ul>
+    </div>
+    <aside id="day-hud" aria-label="일과 HUD">
+      <header class="day-hud-head">
+        <strong>DayHUD</strong>
+        <span id="day-date">일과 · MORNING</span>
+      </header>
+      <ol id="day-beats"></ol>
+      <section class="day-panel" aria-label="발언">
+        <h2>Voice / 발언</h2>
+        <div id="day-stats"></div>
+      </section>
+      <section class="day-panel" aria-label="신뢰">
+        <h2>Trust / 신뢰 [A→B]</h2>
+        <ul id="day-relations"></ul>
+      </section>
+      <p id="day-note"></p>
+      <div id="day-choices"></div>
+      <div class="day-actions">
+        <button type="button" id="day-advance">다음 비트</button>
+        <button type="button" id="day-reset">새 학기</button>
+      </div>
+      <button type="button" id="day-sortie">CRISIS / SortieLite</button>
+    </aside>
+    <div id="bay-overlay" hidden>
+      <aside id="bay-hud" aria-label="정비 베이">
+        <header class="sortie-head">
+          <strong>Bay</strong>
+          <span>로드아웃만 / loadout only</span>
+        </header>
+        <p id="bay-note">씰·팔 확인. 전투 중 교체 없음. 당직은 CRISIS → SortieLite. / Check seals and arms. No in-fight swap. Fight starts from CRISIS → SortieLite.</p>
+        <button type="button" id="bay-close">닫기 / Close</button>
+      </aside>
+    </div>
+    <div id="sortie-overlay" hidden>
+      <aside id="sortie-hud" aria-label="SortieLite">
+        <header class="sortie-head">
+          <strong>SortieLite</strong>
+          <span>CRISIS · Auto · Shoreframe / WallScout / Seamkin</span>
+        </header>
+        <p id="sortie-map">CRISIS · SortieLite</p>
+        <ol id="sortie-lane"></ol>
+        <div id="sortie-units"></div>
+        <p id="sortie-log"></p>
+        <div id="sortie-actions"></div>
+        <div class="sortie-footer">
+          <button type="button" id="sortie-auto">Auto 한 턴 / Auto turn</button>
+          <button type="button" id="sortie-leave" hidden>학원으로 / Return</button>
+        </div>
+      </aside>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "clock": {
+    "realSecondsPerBeat": 12,
+    "beats": ["MORNING", "BRIEF", "BLOCK_A", "MEAL", "BLOCK_B", "FREE", "EOD"]
+  },
+  "walkSpeed": 1.55,
+  "arriveRadius": 0.42,
+  "waypoints": [
+    {
+      "id": "Talk",
+      "label": "Talk",
+      "position": [-6, 0, -4],
+      "color": "#6ec8d4",
+      "kind": "ring"
+    },
+    {
+      "id": "Drill",
+      "label": "Drill",
+      "position": [7, 0, -5],
+      "color": "#d4b36e",
+      "kind": "ring"
+    },
+    {
+      "id": "Desk",
+      "label": "Desk",
+      "position": [-8, 0, 2],
+      "color": "#9ad48a",
+      "kind": "ring"
+    },
+    {
+      "id": "Bay",
+      "label": "Bay",
+      "position": [-2, 0, 8],
+      "color": "#8aa4d4",
+      "kind": "ring"
+    },
+    {
+      "id": "Shop",
+      "label": "Shop",
+      "position": [9, 0, 4],
+      "color": "#d48aa4",
+      "kind": "ring"
+    }
+  ],
+  "agents": [
+    {
+      "slotId": "cadet_iseul",
+      "walkSpeed": 1.45,
+      "stops": {
+        "MORNING": "Desk",
+        "BRIEF": "Talk",
+        "BLOCK_A": "Desk",
+        "MEAL": "Talk",
+        "BLOCK_B": "Desk",
+        "FREE": "Talk",
+        "EOD": "Desk"
+      }
+    },
+    {
+      "slotId": "cadet_rio",
+      "walkSpeed": 1.7,
+      "stops": {
+        "MORNING": "Bay",
+        "BRIEF": "Drill",
+        "BLOCK_A": "Bay",
+        "MEAL": "Shop",
+        "BLOCK_B": "Drill",
+        "FREE": "Bay",
+        "EOD": "Bay"
+      }
+    },
+    {
+      "slotId": "cadet_minjae",
+      "walkSpeed": 1.6,
+      "stops": {
+        "MORNING": "Shop",
+        "BRIEF": "Shop",
+        "BLOCK_A": "Drill",
+        "MEAL": "Desk",
+        "BLOCK_B": "Shop",
+        "FREE": "Drill",
+        "EOD": "Shop"
+      }
+    }
+  ]
+}
