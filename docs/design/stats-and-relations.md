@@ -4,7 +4,7 @@
 **#2 deliverable.** Inspired by GPM *shapes* (JP Wikipedia systems + Kimimi).  
 **Do not** ship GPM Japanese stat names (体力/気力/…) or cast names in product UI.
 
-Fiction / academy names: [`original-pitch.md`](original-pitch.md). Day beats: [`../research/day-loop.md`](../research/day-loop.md).
+Fiction / academy names: [`original-pitch.md`](original-pitch.md). Day beats: [`../research/day-loop.md`](../research/day-loop.md). IA: [`ia.md`](ia.md).
 
 ---
 

@@ -5,7 +5,7 @@
 **프로젝트 입장:** *시스템*에서 영감 — GPM 리메이크·팬게임이 아님.  
 No copyrighted names of characters, songs, specific medals, Action Code tables, or dialogue.
 
-M1 locks: [`original-pitch.md`](original-pitch.md) · [`ia.md`](ia.md) · [`vrm-slots.md`](vrm-slots.md) · [`../LEGAL.md`](../LEGAL.md). Research copy: [`../research/design-implications.md`](../research/design-implications.md).
+Product lock (fiction / IA / VRM): [`../design/original-pitch.md`](../design/original-pitch.md) · [`../design/ia.md`](../design/ia.md) · [`../design/vrm-slots.md`](../design/vrm-slots.md). Same borrow-vs-invent text: [`../design/design-implications.md`](../design/design-implications.md).
 
 ---
 
