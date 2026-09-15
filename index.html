@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nuri Term / 누리학기 — NPC schedules</title>
+    <title>Nuri Term / 누리학기 — day sim MVP</title>
   </head>
   <body>
     <div id="hud">
-      <strong>Nuri Term</strong> · 자율 NPC 스케줄 · Hub Talk/Drill/Desk/Bay/Shop
+      <strong>Nuri Term</strong> · 일과 MVP · Hub Talk/Drill/Desk/Bay/Shop
       <label class="slot-picker">
         <span>Avatar slot</span>
         <select id="slot-select"></select>
@@ -17,6 +17,27 @@
       <p id="clock-status">학원 시계 대기…</p>
       <ul id="npc-roster"></ul>
     </div>
+    <aside id="day-hud" aria-label="일과 HUD">
+      <header class="day-hud-head">
+        <strong>DayHUD</strong>
+        <span id="day-date">학기 1일 · MORNING</span>
+      </header>
+      <ol id="day-beats"></ol>
+      <section class="day-panel" aria-label="바이탈">
+        <h2>Vitals · Voice</h2>
+        <div id="day-stats"></div>
+      </section>
+      <section class="day-panel" aria-label="관계">
+        <h2>Trust[A→B]</h2>
+        <ul id="day-relations"></ul>
+      </section>
+      <p id="day-note"></p>
+      <div id="day-choices"></div>
+      <div class="day-actions">
+        <button type="button" id="day-advance">다음 비트</button>
+        <button type="button" id="day-reset">새 학기</button>
+      </div>
+    </aside>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

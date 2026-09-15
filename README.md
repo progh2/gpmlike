@@ -26,14 +26,28 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking different IA hub routes (`Talk` `Drill` `Desk` `Bay` `Shop`), idle/walk, and the slot dropdown (focus a walking NPC, or preview any other catalog face).
+Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking IA hub routes (`Talk` `Drill` `Desk` `Bay` `Shop`), idle/walk, the slot dropdown, and the **DayHUD** overlay (date / beat / stats / Trust).
 
 ```bash
 npm run build
 npm run preview
 ```
 
-`npm run build` type-checks with `tsc` and writes static files to `dist/` (GitHub Pages can publish that folder later).
+`npm run build` type-checks with `tsc`, runs slot validation, and writes static files to `dist/` (GitHub Pages can publish that folder later).
+
+### How to play the day sim MVP (#9)
+
+Original copy only. Stat / relation IDs match [`docs/design/stats-and-relations.md`](docs/design/stats-and-relations.md). Day beats match [`docs/research/day-loop.md`](docs/research/day-loop.md): `MORNING` → `BRIEF` → `BLOCK_A` → `MEAL` → `BLOCK_B` → `FREE` → `EOD`.
+
+1. Open the demo. **DayHUD** (right) shows term day, beat strip, vitals (`Body` `Drive` `Focus` `Mind` `Presence` `Morale`), `Voice`, and bidirectional `Trust` for the three walking cadets.
+2. **MORNING** — pick one of two choices (greet 한이슬, or check gear alone). Stats / `Trust` change immediately. The beat will not advance until you pick.
+3. Click **다음 비트**. `BRIEF` pays a `Voice` stipend. `BLOCK_A` / `MEAL` / `BLOCK_B` are flavor beats (no extra choice).
+4. **FREE** — pick one hub verb: `Talk` (리오, spends `Voice`) or `Drill` (해벽 보행). Again, stats / `Trust` update.
+5. Advance through **EOD**, then **다음 날로**. EOD applies daily decay (`Focus` `Mind` `Presence`) and increments the term day.
+6. **Refresh the tab.** Date, beat, stats, and relations restore from `localStorage` (`nuri-term.day-sim.v1`). NPCs snap to the saved beat’s route, then walk.
+7. **새 학기** wipes the stored session.
+
+The existing Three scene stays: NPC walk, VRM slot dropdown (`?slot=`), and Hub nodes are unchanged. The academy clock is **player-driven** (paused auto-loop) so a beat change sends NPCs to that beat’s stops.
 
 ### Swap a VRM (no code change)
 
@@ -59,7 +73,7 @@ Steps:
 
 Runtime reads [`public/npc-schedules.json`](public/npc-schedules.json). This file is **not** the avatar catalog — keep `id` / `vrmUrl` / `license` in [`public/avatar-slots.json`](public/avatar-slots.json).
 
-1. **`clock.realSecondsPerBeat`** — how long each day beat lasts in real seconds (looping timer). Smaller = NPCs change destination more often.
+1. **`clock.realSecondsPerBeat`** — beat length used by the academy clock. The day-sim MVP pauses auto-loop; the player advances beats, then NPCs walk to that beat’s stops.
 2. **`clock.beats`** — order of the academy day. Use the locked IDs only: `MORNING` `BRIEF` `BLOCK_A` `MEAL` `BLOCK_B` `FREE` `EOD`.
 3. **`waypoints`** — **only** the locked Hub node IDs from [`docs/design/ia.md`](docs/design/ia.md): `Talk` `Drill` `Desk` `Bay` `Shop`. No extra place/screen ids (no Classroom / Roof / Gate, no GPM names). You may move `position` `[x, y, z]` or change `label` / `color` / `kind` (`ring` pole or `box` marker) — do not rename the `id`.
 4. **`agents`** — one entry per walking NPC. `slotId` **must** be a locked cast id (`cadet_iseul`, `cadet_rio`, …). `stops` maps each day beat (`MORNING` → `EOD`) → one of those five hub ids. Give each agent a **different** route. Optional per-agent `walkSpeed` (m/s) overrides the file-level `walkSpeed`.
@@ -96,6 +110,7 @@ These are implementation samples, not our cast. Slot `displayName` values stay o
 | [docs/design/vrm-slots.md](docs/design/vrm-slots.md) | Avatar slot convention (#5) |
 | [docs/design/vrm-slots.schema.json](docs/design/vrm-slots.schema.json) | Slot JSON schema (#5) |
 | [public/npc-schedules.json](public/npc-schedules.json) | NPC routes + day-beat clock (#8) |
+| `src/daySim.ts` | Day sim session + localStorage (#9) |
 
 ## License
 

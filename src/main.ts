@@ -14,10 +14,20 @@ import {
   writeSlotQuery,
 } from "./avatarSlots";
 import { disposeVrm, loadVrm } from "./loadVrm";
+import { bindDayHud, renderDayHud, type DayHudElements } from "./dayHud";
+import {
+  type DaySession,
+  advanceBeat,
+  applyChoice,
+  loadSession,
+  persistSession,
+  resetSession,
+} from "./daySim";
 import {
   type NpcAgent,
   agentLabel,
   findAgent,
+  placeAgentAtBeat,
   spawnScheduledAgents,
   tickAgent,
 } from "./npcAgents";
@@ -95,6 +105,7 @@ const slotMeta = requireElement<HTMLElement>("#slot-meta");
 const slotStatus = requireElement<HTMLElement>("#slot-status");
 const clockStatus = requireElement<HTMLElement>("#clock-status");
 const npcRoster = requireElement<HTMLElement>("#npc-roster");
+const dayHud: DayHudElements = bindDayHud();
 
 const clock = new THREE.Clock();
 const followTarget = new THREE.Vector3();
@@ -104,6 +115,7 @@ let agents: NpcAgent[] = [];
 let schedule: ScheduleCatalog;
 let academyClock: AcademyClock;
 let focusedSlotId = "";
+let session: DaySession = loadSession();
 
 const PREVIEW_STAND = new THREE.Vector3(3.6, 0, 1.4);
 
@@ -150,9 +162,50 @@ function populateSelect(catalog: AvatarSlotCatalog, selectedId: string): void {
 }
 
 function renderClockHud(): void {
-  const beat = academyClock.beat;
-  const left = academyClock.beatRemaining.toFixed(1);
-  clockStatus.textContent = `학원 시계 · ${beat} · 다음 비트 ${left}s · ${academyClock.realSecondsPerBeat}s/beat`;
+  clockStatus.textContent = `학원 시계 · 학기 ${session.termDay}일 · ${academyClock.beat} · 플레이어 진행`;
+}
+
+function syncClockToSession(): void {
+  academyClock.paused = true;
+  academyClock.seekBeat(session.beat);
+}
+
+function commitSession(): void {
+  persistSession(session);
+  syncClockToSession();
+  paintDayHud();
+}
+
+function paintDayHud(): void {
+  renderDayHud(dayHud, session, catalog, chooseDayOption);
+}
+
+function chooseDayOption(choiceId: string): void {
+  const result = applyChoice(session, choiceId);
+  if (!result.ok) {
+    session.log = result.reason;
+    paintDayHud();
+    return;
+  }
+  commitSession();
+}
+
+function stepDay(): void {
+  const result = advanceBeat(session);
+  if (!result.ok) {
+    session.log = result.reason;
+    paintDayHud();
+    return;
+  }
+  commitSession();
+}
+
+function restartTerm(): void {
+  session = resetSession();
+  for (const agent of agents) {
+    placeAgentAtBeat(agent, schedule, session.beat);
+  }
+  commitSession();
 }
 
 function renderRoster(): void {
@@ -255,19 +308,34 @@ window.addEventListener("resize", () => {
 const catalog = await loadCatalog();
 schedule = await loadSchedule(catalog);
 academyClock = new AcademyClock(schedule.clock);
+syncClockToSession();
 addSchedulePlaceholders(scene, schedule.waypoints);
 
 try {
   setStatus("NPC 3명 로드 중…", "busy");
   agents = await spawnScheduledAgents(catalog, schedule, scene);
+  for (const agent of agents) {
+    placeAgentAtBeat(agent, schedule, session.beat);
+  }
 } catch (error) {
   const message = error instanceof Error ? error.message : "알 수 없는 오류";
   setStatus(`NPC 로드 실패: ${message}`, "error");
 }
+
+paintDayHud();
+persistSession(session);
 
 await showSlot(catalog, slotIdFromSearch());
 renderer.setAnimationLoop(frame);
 
 slotSelect.addEventListener("change", () => {
   void showSlot(catalog, slotSelect.value);
+});
+
+dayHud.advance.addEventListener("click", () => {
+  stepDay();
+});
+
+dayHud.reset.addEventListener("click", () => {
+  restartTerm();
 });
