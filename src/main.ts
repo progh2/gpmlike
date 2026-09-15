@@ -22,7 +22,7 @@ import {
   tickAgent,
 } from "./npcAgents";
 import { AcademyClock, loadSchedule, type ScheduleCatalog } from "./npcSchedule";
-import { addSchedulePlaceholders, makeBillboardLabel } from "./placeholders";
+import { addSchedulePlaceholders, detachBillboardLabels, makeBillboardLabel } from "./placeholders";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1f2a);
@@ -107,6 +107,15 @@ let focusedSlotId = "";
 
 const PREVIEW_STAND = new THREE.Vector3(3.6, 0, 1.4);
 
+function dropPreview(): void {
+  if (!currentVrm) {
+    return;
+  }
+  detachBillboardLabels(currentVrm.scene);
+  disposeVrm(currentVrm, scene);
+  currentVrm = undefined;
+}
+
 function setStatus(text: string, kind: "idle" | "busy" | "error" = "idle"): void {
   slotStatus.textContent = text;
   slotStatus.dataset.kind = kind;
@@ -179,10 +188,7 @@ async function showSlot(catalog: AvatarSlotCatalog, requestedId: string | null):
 
   const living = findAgent(agents, slot.id);
   if (living) {
-    if (currentVrm) {
-      disposeVrm(currentVrm, scene);
-      currentVrm = undefined;
-    }
+    dropPreview();
     lookAtAgent(living);
     setStatus(`스케줄 NPC · ${slot.id} · ${living.gait} → ${living.targetId}`, "idle");
     return;
@@ -205,13 +211,12 @@ async function showSlot(catalog: AvatarSlotCatalog, requestedId: string | null):
   }
 
   if (generation !== loadGeneration) {
+    detachBillboardLabels(next.scene);
     disposeVrm(next, scene);
     return;
   }
 
-  if (currentVrm) {
-    disposeVrm(currentVrm, scene);
-  }
+  dropPreview();
 
   currentVrm = next;
   next.scene.position.copy(PREVIEW_STAND);
