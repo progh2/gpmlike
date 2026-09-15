@@ -22,17 +22,17 @@
       "kind": "ring"
     },
     {
-      "id": "Bay",
-      "label": "Bay",
-      "position": [-2, 0, 8],
-      "color": "#8aa4d4",
-      "kind": "ring"
-    },
-    {
       "id": "Desk",
       "label": "Desk",
       "position": [-8, 0, 2],
       "color": "#9ad48a",
+      "kind": "ring"
+    },
+    {
+      "id": "Bay",
+      "label": "Bay",
+      "position": [-2, 0, 8],
+      "color": "#8aa4d4",
       "kind": "ring"
     },
     {
@@ -41,27 +41,6 @@
       "position": [9, 0, 4],
       "color": "#d48aa4",
       "kind": "ring"
-    },
-    {
-      "id": "Classroom",
-      "label": "Classroom",
-      "position": [1.2, 0, -8.4],
-      "color": "#7ec8e8",
-      "kind": "box"
-    },
-    {
-      "id": "Roof",
-      "label": "Roof",
-      "position": [-11, 0, -10],
-      "color": "#e0c878",
-      "kind": "box"
-    },
-    {
-      "id": "Gate",
-      "label": "Gate",
-      "position": [0.4, 0, 13.2],
-      "color": "#b8c4d8",
-      "kind": "box"
     }
   ],
   "agents": [
@@ -69,13 +48,13 @@
       "slotId": "cadet_iseul",
       "walkSpeed": 1.45,
       "stops": {
-        "MORNING": "Classroom",
-        "BRIEF": "Classroom",
-        "BLOCK_A": "Talk",
-        "MEAL": "Desk",
-        "BLOCK_B": "Classroom",
+        "MORNING": "Desk",
+        "BRIEF": "Talk",
+        "BLOCK_A": "Desk",
+        "MEAL": "Talk",
+        "BLOCK_B": "Desk",
         "FREE": "Talk",
-        "EOD": "Classroom"
+        "EOD": "Desk"
       }
     },
     {
@@ -85,22 +64,22 @@
         "MORNING": "Bay",
         "BRIEF": "Drill",
         "BLOCK_A": "Bay",
-        "MEAL": "Gate",
+        "MEAL": "Shop",
         "BLOCK_B": "Drill",
         "FREE": "Bay",
-        "EOD": "Gate"
+        "EOD": "Bay"
       }
     },
     {
       "slotId": "cadet_minjae",
       "walkSpeed": 1.6,
       "stops": {
-        "MORNING": "Roof",
+        "MORNING": "Shop",
         "BRIEF": "Shop",
-        "BLOCK_A": "Roof",
-        "MEAL": "Gate",
+        "BLOCK_A": "Drill",
+        "MEAL": "Desk",
         "BLOCK_B": "Shop",
-        "FREE": "Roof",
+        "FREE": "Drill",
         "EOD": "Shop"
       }
     }
