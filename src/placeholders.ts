@@ -2,6 +2,19 @@ import * as THREE from "three";
 import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
 import type { WaypointDef } from "./npcSchedule";
 
+export function detachBillboardLabels(root: THREE.Object3D): void {
+  const leftover: CSS2DObject[] = [];
+  root.traverse((obj) => {
+    if (obj instanceof CSS2DObject) {
+      leftover.push(obj);
+    }
+  });
+  for (const label of leftover) {
+    label.element.remove();
+    label.removeFromParent();
+  }
+}
+
 export function makeBillboardLabel(text: string, className: string, y = 1.85): CSS2DObject {
   const el = document.createElement("div");
   el.className = className;
