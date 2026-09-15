@@ -47,7 +47,7 @@ EN allowed: clear-license VRM, CC0, self-made only. No “we found it on a forum
 | **ROM / ISO / 세이브 / 추출 데이터** | 불법 복제물 |
 | 립 **스프라이트·3D·UI·폰트·OST·SFX** | 에셋 도용 |
 | 조사 중 캡처한 **저작권 아트 스크린샷**을 인게임 플레이스홀더로 커밋 | 여전히 원작 아트 |
-| UI에 GPM 일본어 스탯명 (`体力` / `気力` / `운동력` 원문 등) | 제품은 오리지널 ID만 |
+| UI에 GPM 일본어 스탯명 (`体力` / `気力` / `運動力` 원문 등) | 제품은 오리지널 ID만 |
 
 EN forbidden: original dialogue; character/mech proper nouns; Action Code tables; map trademarks; ROM/rips; shipping research screenshots of copyrighted art as placeholders; GPM Japanese stat names in UI.
 
