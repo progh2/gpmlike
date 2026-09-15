@@ -77,6 +77,7 @@ M2는 노드 3개만 클릭돼도 되지만 **목록은 이 다섯으로 잠근�
 - 기본 조작: **Auto** (이동/공격 굵게).
 - Manual 콤보 문법은 **이 잠금에 없음** (원작 Action Code 표 이식 금지).
 - 종료 후 직전 beat로 resume. 장비 교체는 `Bay`에서만 (전투 중 `SupplyPad`는 희귀 — M2 stub 불필요).
+- M5 프로토(#10): `CRISIS` → `SortieLite` 오버레이 (`DayHUD` **당직 / Sortie** 또는 Hub `Bay`). **Auto** 기본. 종료 후 직전 beat 복귀. 장비는 `Bay`만. 유닛 종류는 Shoreframe / WallScout / Seamkin — [`original-pitch.md`](original-pitch.md) §8. Action Code 없음.
 
 ---
 

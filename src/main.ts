@@ -31,8 +31,16 @@ import {
   spawnScheduledAgents,
   tickAgent,
 } from "./npcAgents";
-import { AcademyClock, loadSchedule, type ScheduleCatalog } from "./npcSchedule";
+import { AcademyClock, loadSchedule, type DayBeat, type ScheduleCatalog } from "./npcSchedule";
 import { addSchedulePlaceholders, detachBillboardLabels, makeBillboardLabel } from "./placeholders";
+import { bindSortieHud, renderSortieHud, setSortieOpen, type SortieHudElements } from "./sortieHud";
+import {
+  createSortie,
+  playAction,
+  playAutoTurn,
+  type SortieAction,
+  type SortieState,
+} from "./sortieLite";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1f2a);
@@ -106,6 +114,8 @@ const slotStatus = requireElement<HTMLElement>("#slot-status");
 const clockStatus = requireElement<HTMLElement>("#clock-status");
 const npcRoster = requireElement<HTMLElement>("#npc-roster");
 const dayHud: DayHudElements = bindDayHud();
+const sortieHud: SortieHudElements = bindSortieHud();
+const daySortie = requireElement<HTMLButtonElement>("#day-sortie");
 
 const clock = new THREE.Clock();
 const followTarget = new THREE.Vector3();
@@ -116,6 +126,8 @@ let schedule: ScheduleCatalog;
 let academyClock: AcademyClock;
 let focusedSlotId = "";
 let session: DaySession = loadSession();
+let sortie: SortieState | undefined;
+let resumeBeat: DayBeat = session.beat;
 
 const PREVIEW_STAND = new THREE.Vector3(3.6, 0, 1.4);
 
@@ -206,6 +218,81 @@ function restartTerm(): void {
     placeAgentAtBeat(agent, schedule, session.beat);
   }
   refreshDay();
+}
+
+function paintSortie(): void {
+  if (!sortie) {
+    return;
+  }
+  renderSortieHud(sortieHud, sortie, chooseSortieAction, stepSortieAuto);
+}
+
+function openSortie(): void {
+  if (sortie) {
+    return;
+  }
+  resumeBeat = session.beat;
+  sortie = createSortie();
+  setSortieOpen(sortieHud, true);
+  paintSortie();
+}
+
+function closeSortie(): void {
+  sortie = undefined;
+  setSortieOpen(sortieHud, false);
+  session.beat = resumeBeat;
+  academyClock.seekBeat(resumeBeat);
+  paintDayHud();
+}
+
+function chooseSortieAction(action: SortieAction): void {
+  if (!sortie) {
+    return;
+  }
+  const result = playAction(sortie, action);
+  if (!result.ok) {
+    sortie.logKo = result.reasonKo;
+    sortie.logEn = result.reasonEn;
+  }
+  paintSortie();
+}
+
+function stepSortieAuto(): void {
+  if (!sortie) {
+    return;
+  }
+  const result = playAutoTurn(sortie);
+  if (!result.ok) {
+    sortie.logKo = result.reasonKo;
+    sortie.logEn = result.reasonEn;
+  }
+  paintSortie();
+}
+
+function hubPickables(): THREE.Object3D[] {
+  const found: THREE.Object3D[] = [];
+  scene.traverse((obj) => {
+    if (typeof obj.userData.hubId === "string") {
+      found.push(obj);
+    }
+  });
+  return found;
+}
+
+const pickRay = new THREE.Raycaster();
+const pickPointer = new THREE.Vector2();
+
+function onCampusPointerDown(event: PointerEvent): void {
+  if (sortie || event.button !== 0 || event.target !== renderer.domElement) {
+    return;
+  }
+  pickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  pickRay.setFromCamera(pickPointer, camera);
+  const hit = pickRay.intersectObjects(hubPickables(), false)[0];
+  if (hit?.object.userData.hubId === "Bay") {
+    openSortie();
+  }
 }
 
 function renderRoster(): void {
@@ -338,3 +425,17 @@ dayHud.advance.addEventListener("click", () => {
 dayHud.reset.addEventListener("click", () => {
   restartTerm();
 });
+
+daySortie.addEventListener("click", () => {
+  openSortie();
+});
+
+sortieHud.leave.addEventListener("click", () => {
+  closeSortie();
+});
+
+renderer.domElement.addEventListener("pointerdown", onCampusPointerDown);
+
+if (new URLSearchParams(window.location.search).has("sortie")) {
+  openSortie();
+}

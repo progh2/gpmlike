@@ -39,6 +39,7 @@ function addHubMarker(scene: THREE.Scene, waypoint: WaypointDef): void {
     );
     block.position.set(x, 0.21, z);
     block.name = `waypoint-box:${waypoint.id}`;
+    block.userData.hubId = waypoint.id;
     scene.add(block);
   }
 
@@ -49,6 +50,7 @@ function addHubMarker(scene: THREE.Scene, waypoint: WaypointDef): void {
   ring.rotation.x = -Math.PI / 2;
   ring.position.set(x, 0.03, z);
   ring.name = `waypoint:${waypoint.id}`;
+  ring.userData.hubId = waypoint.id;
   scene.add(ring);
 
   const pole = new THREE.Mesh(
@@ -61,6 +63,7 @@ function addHubMarker(scene: THREE.Scene, waypoint: WaypointDef): void {
   );
   pole.position.set(x, 0.78, z);
   pole.name = `waypoint-pole:${waypoint.id}`;
+  pole.userData.hubId = waypoint.id;
   scene.add(pole);
 
   const cap = new THREE.Mesh(
@@ -69,6 +72,7 @@ function addHubMarker(scene: THREE.Scene, waypoint: WaypointDef): void {
   );
   cap.position.set(x, 1.6, z);
   cap.name = `waypoint-cap:${waypoint.id}`;
+  cap.userData.hubId = waypoint.id;
   scene.add(cap);
 
   const label = makeBillboardLabel(waypoint.label, "wp-label", 1.95);

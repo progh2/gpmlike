@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nuri Term / 누리학기 — day sim MVP</title>
+    <title>Nuri Term / 누리학기 — day sim + SortieLite</title>
   </head>
   <body>
     <div id="hud">
-      <strong>Nuri Term</strong> · 일과 MVP · Hub Talk/Drill/Desk/Bay/Shop
+      <strong>Nuri Term</strong> · 일과 MVP · Hub Talk/Drill/Desk/Bay/Shop · Bay = 당직
       <label class="slot-picker">
         <span>Avatar slot</span>
         <select id="slot-select"></select>
@@ -37,7 +37,25 @@
         <button type="button" id="day-advance">다음 비트</button>
         <button type="button" id="day-reset">새 학기</button>
       </div>
+      <button type="button" id="day-sortie">당직 / Sortie</button>
     </aside>
+    <div id="sortie-overlay" hidden>
+      <aside id="sortie-hud" aria-label="당직 전투">
+        <header class="sortie-head">
+          <strong>SortieLite</strong>
+          <span>CRISIS · 오리지널 유닛만</span>
+        </header>
+        <p id="sortie-map">3번 당직 · 솔트래치 절개</p>
+        <ol id="sortie-lane"></ol>
+        <div id="sortie-units"></div>
+        <p id="sortie-log"></p>
+        <div id="sortie-actions"></div>
+        <div class="sortie-footer">
+          <button type="button" id="sortie-auto">Auto 한 턴 / Auto turn</button>
+          <button type="button" id="sortie-leave" hidden>학원으로 / Return</button>
+        </div>
+      </aside>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking IA hub routes (`Talk` `Drill` `Desk` `Bay` `Shop`), idle/walk, the slot dropdown, and the **DayHUD** overlay (beat strip, `Voice`, `Trust`).
+Open the URL Vite prints (usually `http://localhost:5173`). You should see a Three.js **campus grid**, **three scheduled NPCs** walking IA hub routes (`Talk` `Drill` `Desk` `Bay` `Shop`), idle/walk, the slot dropdown, the **DayHUD** overlay (beat strip, `Voice`, `Trust`), and a **당직 / Sortie** button for the combat-lite prototype.
 
 ```bash
 npm run build
@@ -48,6 +48,19 @@ Team lock: **one lap** `MORNING` → `BRIEF` → `BLOCK_A` → `MEAL` → `BLOCK
 7. **새 학기** clears the EOD save.
 
 NPC walk, VRM slot dropdown (`?slot=`), and Hub nodes `Talk` `Drill` `Desk` `Bay` `Shop` stay as they are. The academy clock is player-driven: each beat change sends NPCs to that beat’s hub stop.
+
+### How to start the fight (#10)
+
+One complete **position-based** watch on a 5-cell lane. Original names only — no GPM mechs, IP, or Action Codes.
+
+Locked kinds: **Shoreframe** · **WallScout** · **Seamkin** ([`docs/design/original-pitch.md`](docs/design/original-pitch.md) §8). Units: **브라인니 / Brineknee** (Shoreframe, player) · **켈프워크 / Kelpwalk** (WallScout, Auto ally) · **패덤틱 / Fathomtick** (Seamkin) on **솔트래치 절개 / Saltlatch Cut**.
+
+1. Open the demo. On **DayHUD** (right), click **당직 / Sortie**. Or click the **Bay** hub marker on the campus grid (id stays `Bay` — gear/loadout stays at Bay; no in-fight swap). Shortcut: `?sortie=1`.
+2. `CRISIS` opens `SortieLite` as an overlay. The current day beat is remembered and restored on return. `Voice`, `Trust`, and the EOD checkpoint (`nuri-term.day-sim.v2`) are **not** written by the fight.
+3. You act, then Kelpwalk acts (Auto), then the Seamkin acts. **Auto 한 턴** (default): strike if adjacent, otherwise step toward the enemy.
+4. Manual verbs (not Action Codes): **전진 Advance** / **후퇴 Withdraw** / **타격 Strike** / **대기 Hold**.
+5. Drop the Fathomtick to 0 HP to win, or lose if Brineknee hits 0. Then **학원으로 / Return** — overlay closes, previous beat resumes.
+6. Hub nodes, VRM slots, NPC schedules, and the day-sim Trust/Voice save stay as they were.
 
 ### Swap a VRM (no code change)
 
@@ -111,6 +124,7 @@ These are implementation samples, not our cast. Slot `displayName` values stay o
 | [docs/design/vrm-slots.schema.json](docs/design/vrm-slots.schema.json) | Slot JSON schema (#5) |
 | [public/npc-schedules.json](public/npc-schedules.json) | NPC routes + day-beat clock (#8) |
 | `src/daySim.ts` | Day sim session + localStorage (#9) |
+| `src/sortieLite.ts` | SortieLite one-battle prototype (#10) |
 
 ## License
 

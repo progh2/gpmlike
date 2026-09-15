@@ -103,7 +103,20 @@ Display copy는 한국어(활력, 영향력 등)를 써도 된다. **코드 ID�
 
 ---
 
-## 8. Disclaimer
+## 8. SortieLite units (draft)
+
+`SortieLite` 프로토(#10)용 **오리지널** 기체·적·지명만. GPM 메카·병기 고유명사 금지.
+
+| Id | Name | Kind |
+| --- | --- | --- |
+| `brineknee` | Brineknee / 브라인니 | Shoreframe (player watch frame) |
+| `kelpwalk` | Kelpwalk / 켈프워크 | WallScout (Auto ally) |
+| `fathomtick` | Fathomtick / 패덤틱 | Seamkin (hostile) |
+| `saltlatch_cut` | Saltlatch Cut / 솔트래치 절개 | 5-cell seawall lane |
+
+---
+
+## 9. Disclaimer
 
 소니 / 소프thouse / Alfa System / GPM 권리자와 **무관**합니다. 이 피치는 `gpmlike`의 오리지널 픽션입니다.  
 Not affiliated with Sony, softhouse-Chara, Alfa System, or *Gunparade March*.
